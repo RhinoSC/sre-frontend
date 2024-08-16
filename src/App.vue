@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import Navbar from './components/Navbar.vue'
+import Navbar from './components/navbar/Navbar.vue'
+
+const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
 </script>
 
 <template >
-  <!-- <main class="inline-flex flex-col items-center justify-start w-full h-full pb-36 bg-zinc-800">
-  </main> -->
-
-  <main class="flex flex-col items-center w-full min-h-screen text-xl bg-gray-dark-400 text-white-smoke font-lato">
+  <main class="flex flex-col items-center w-full min-h-screen transition bg-gray-dark-400 text-white-smoke dark:text-gray-dark-400 dark:bg-gray-light-100 font-lato" :class="isDarkMode ? 'dark' : 'light'">
     <!-- Navbar -->
-    <div class="flex flex-row justify-center w-full bg-gray-dark-300">
+    <div class="flex flex-row justify-end w-full h-12 px-6 bg-gray-dark-300 dark:bg-gray-light-300">
       <Navbar />
     </div>
 
@@ -19,8 +19,9 @@ import Navbar from './components/Navbar.vue'
     </main>
 
     <!-- Footer -->
-    <footer class="p-4 text-center bg-gray-dark-200">
+    <footer class="p-4 text-xl font-bold text-center">
       <!-- Contenido del Footer -->
+       SRE Tracker 2024
     </footer>
   </main>
   <!-- <RouterView /> -->

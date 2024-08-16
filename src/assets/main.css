@@ -5,6 +5,10 @@
 @tailwind utilities;
 
 
+ #app {
+  margin: 0 auto;
+  box-sizing: border-box;
+}
 /* #app {
   max-width: 1280px;
   margin: 0 auto;
