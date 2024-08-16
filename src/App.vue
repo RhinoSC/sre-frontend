@@ -1,23 +1,29 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import Navbar from './components/Navbar.vue'
 </script>
 
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+<template >
+  <!-- <main class="inline-flex flex-col items-center justify-start w-full h-full pb-36 bg-zinc-800">
+  </main> -->
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <main class="flex flex-col items-center w-full min-h-screen text-xl bg-gray-dark-400 text-white-smoke font-lato">
+    <!-- Navbar -->
+    <div class="flex flex-row justify-center w-full bg-gray-dark-300">
+      <Navbar />
     </div>
-  </header>
 
-  <RouterView />
+    <!-- Contenido principal -->
+    <main class="flex-1 p-6">
+      <!-- Aquí irá el contenido de la aplicación -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-4 text-center bg-gray-dark-200">
+      <!-- Contenido del Footer -->
+    </footer>
+  </main>
+  <!-- <RouterView /> -->
 </template>
 
 <style scoped>
