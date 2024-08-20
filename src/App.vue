@@ -7,15 +7,17 @@ const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
 </script>
 
 <template >
-  <main class="flex flex-col items-center w-full min-h-screen transition bg-gray-dark-400 text-white-smoke dark:text-gray-dark-400 dark:bg-gray-light-100 font-lato" :class="isDarkMode ? 'dark' : 'light'">
+   <!-- :class="isDarkMode ? 'dark' : 'light'" -->
+  <main class="flex flex-col items-center w-full min-h-screen transition dark:bg-gray-dark-400 dark:text-white-smoke text-gray-dark-400 bg-gray-light-100 font-lato">
     <!-- Navbar -->
-    <div class="flex flex-row justify-end w-full h-12 px-6 bg-gray-dark-300 dark:bg-gray-light-300">
+    <div class="flex flex-row justify-end w-full h-12 px-6 dark:bg-gray-dark-300 bg-gray-light-300">
       <Navbar />
     </div>
 
     <!-- Contenido principal -->
-    <main class="flex-1 p-6">
+    <main class="flex-1 w-full p-6">
       <!-- Aquí irá el contenido de la aplicación -->
+      <RouterView />
     </main>
 
     <!-- Footer -->
@@ -24,7 +26,6 @@ const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
        SRE Tracker 2024
     </footer>
   </main>
-  <!-- <RouterView /> -->
 </template>
 
 <style scoped>

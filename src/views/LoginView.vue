@@ -43,7 +43,7 @@ const password = ref('')
 const handleLogin = async () => {
   await userLogin(username.value, password.value)
   // Redirect after login
-  router.push('/dashboard')
+  router.push('/')
 
   return { username, password, handleLogin }
 }

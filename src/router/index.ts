@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import SchedulesView from '../views/schedule/ScheduleView.vue'
+import SchedulesEditView from '../views/schedule/ScheduleEditView.vue'
+import SchedulesAddView from '../views/schedule/ScheduleAddView.vue'
 import Login from '../views/LoginView.vue'
-import Dashboard from '../views/DashboardView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,10 +34,22 @@ const router = createRouter({
       meta: { requiresAuth: false }
     },
     {
-      path: '/dashboard',
-      name: 'Dashboard',
-      component: Dashboard,
-      meta: { requiresAuth: true }
+      path: '/schedules',
+      name: 'Schedules',
+      component: SchedulesView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/schedules/new',
+      name: 'ScheduleAdd',
+      component: SchedulesAddView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/schedules/edit/:id',
+      name: 'ScheduleEdit',
+      component: SchedulesEditView,
+      meta: { requiresAuth: false }
     }
   ]
 })
@@ -46,7 +60,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else if (to.path === '/login' && isAuthenticated) {
-    next('/dashboard')
+    next('/')
   } else {
     next()
   }

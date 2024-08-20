@@ -2,7 +2,7 @@
   <div class="flex items-center justify-end p-4">
     <button
       @click="toggleTheme"
-      class="p-2 transition-colors duration-300 rounded-full bg-violet-600 dark:bg-white-smoke dark:text-gray-dark-400 text-white-smoke focus:outline-none"
+      class="p-2 transition-colors duration-300 rounded-full dark:bg-violet-600 bg-white-smoke text-gray-dark-400 dark:text-white-smoke focus:outline-none"
       :class="{ 'bg-gray-light-100 text-gray-dark-400': !isDarkMode }"
     >
       <svg
