@@ -29,9 +29,10 @@
             <td class="px-6 py-4">{{ schedule.event_id }}</td>
             <td class="px-6 py-4">{{ schedule.name }}</td>
             <td class="px-6 py-4">{{ schedule.runs.length }}</td>
-            <td class="px-6 py-4">{{ schedule.start_time_mili }} / {{ schedule.end_time_mili }}</td>
+            <td class="px-6 py-4">{{ MStoStringTime(schedule.start_time_mili) }} / {{
+              MStoStringTime(schedule.end_time_mili) }}</td>
             <td>
-              <RouterLink :to="`/schedules/edit/${schedule.event_id}`"><img src="" alt="Edit"></RouterLink>
+              <RouterLink :to="`/schedules/edit/${schedule.id}`"><img src="" alt="Edit"></RouterLink>
               <a href="#"><img src="" alt="Delete"></a>
             </td>
           </tr>
@@ -43,5 +44,28 @@
 </template>
 
 <script lang="ts" setup>
-const schedules = [{ "event_id": "event1", "name": "event 1 name", "runs": [], "start_time_mili": "12:00 - 22-09-2024", "end_time_mili": "12:00 - 22-09-2024" }]
+import { ref, onMounted } from 'vue'
+import type { APIResponse } from '@/types/api';
+import type { Schedule } from '@/types/schedule';
+import { apiGetSchedules } from '@/api/schedule/schedule';
+import { MStoStringTime } from '@/utils/strings';
+
+// const schedules = [{ "event_id": "event1", "name": "event 1 name", "runs": [], "start_time_mili": "12:00 - 22-09-2024", "end_time_mili": "12:00 - 22-09-2024" }]
+const schedules = ref<Schedule[]>([])
+
+const handleGetAllSchedules = async () => {
+  try {
+
+    const response: APIResponse<Schedule[]> = await apiGetSchedules()
+    schedules.value = response.data
+
+  } catch (error) {
+    console.error("Failed to get schedules:", error);
+    alert("There was an error getting the schedule. Please try again.");
+  }
+}
+
+onMounted(async () => {
+  await handleGetAllSchedules()
+})
 </script>
