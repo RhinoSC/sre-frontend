@@ -170,7 +170,7 @@
                 <tr v-if="isRowDay(element)">
                   <td colspan="6" class="font-bold text-center bg-violet-600 text-white-smoke"
                     :draggable="!isRowDay(element)">
-                    {{ element.dayText }} {{ index }}</td>
+                    {{ element.dayText }}</td>
                 </tr>
                 <tr v-else class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 item-draggable">
                   <td class="flex flex-row items-center justify-start gap-2 px-6 py-4">

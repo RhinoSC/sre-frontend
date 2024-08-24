@@ -56,6 +56,14 @@
             format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " />
         </div>
       </div>
+      <div class="flex flex-wrap mb-6">
+        <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-first-name">
+          Setup time
+        </label>
+        <!-- <VueDatePicker v-model="startDate" placeholder="Start date" text-input :flow="flow" utc locale="es-CO"
+          format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " /> -->
+        <VueDatePicker v-model="setupTime" time-picker />
+      </div>
       <div class="flex flex-wrap mb-6 -mx-3">
       </div>
       <div class="flex flex-row items-center justify-end gap-2 font-bold">
@@ -133,12 +141,16 @@ import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
-const newSchedule = ref<ScheduleDTO>({ name: "", start_time_mili: 0, end_time_mili: 0, event_id: "" })
+const newSchedule = ref<ScheduleDTO>({ name: "", start_time_mili: 0, end_time_mili: 0, event_id: "", setup_time_mili: 0 })
 
 const events = [{ "id": "event1", "name": "event 1" }]
 
 const startDate = ref();
 const endDate = ref();
+const setupTime = ref({
+  hours: new Date().getHours(),
+  minutes: new Date().getMinutes()
+});
 const flow = ref(['year', 'month', 'calendar']);
 
 watch(startDate, (newDate, _) => {
@@ -149,6 +161,10 @@ watch(startDate, (newDate, _) => {
 watch(endDate, (newDate, _) => {
   let dateObject = new Date(newDate)
   newSchedule.value.end_time_mili = dateObject.getTime()
+})
+
+watch(setupTime, (newTime, _) => {
+  newSchedule.value.setup_time_mili = (newTime.hours * 3.6e+6 + newTime.minutes * 60000)
 })
 
 const handleCreateSchedule = async () => {

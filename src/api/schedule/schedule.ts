@@ -32,3 +32,23 @@ export const apiCreateSchedule = async <T>(scheduleDTO: ScheduleDTO): Promise<AP
     throw new Error("Failed to create schedule");
   }
 }
+
+export const apiUpdateSchedule = async <T>(schedule: Schedule): Promise<APIResponse<T>> => {
+  try {
+    const response = await apiClient.patch(`/schedules/${schedule.id}`, schedule)
+    const apiResponse: APIResponse = response.data
+    return apiResponse
+  } catch (error) {
+    throw new Error("Failed to create schedule");
+  }
+}
+
+export const apiDeleteSchedule = async <T>(id: string): Promise<APIResponse<T>> => {
+  try {
+    const response = await apiClient.delete(`/schedules/${id}`)
+    const apiResponse: APIResponse = response.data
+    return apiResponse
+  } catch (error) {
+    throw new Error("Failed to delete schedule");
+  }
+}

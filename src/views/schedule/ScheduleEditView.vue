@@ -44,7 +44,7 @@
           </div>
           <div class="w-full px-3 mb-6 md:w-1/2 md:mb-0">
             <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-first-name">
-              Start date
+              End date
             </label>
             <VueDatePicker v-model="endDate" placeholder="End date" text-input :flow="flow" utc locale="es-CO"
               format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " />
@@ -89,7 +89,7 @@
 <script lang="ts" setup>
 import RunManagerComponent from '@/components/schedule/RunsManager.vue'
 
-import { apiCreateSchedule, apiGetScheduleByID } from '@/api/schedule/schedule';
+import { apiCreateSchedule, apiGetScheduleByID, apiUpdateSchedule } from '@/api/schedule/schedule';
 import type { APIResponse } from '@/types/api';
 import type { ManageSchedule, Schedule, ScheduleDTO } from '@/types/schedule';
 import { ref, watch, onMounted } from 'vue';
@@ -155,6 +155,22 @@ const handleGetScheduleById = async () => {
 
 const handleUpdateSchedule = async () => {
   try {
+    if (!newSchedule.value) {
+      throw new Error("no hay schedule");
+    }
+
+    const response: APIResponse<Schedule> = await apiUpdateSchedule(newSchedule.value)
+
+    console.log("Schedule updated:", response.data);
+    router.push('/schedules')
+  } catch (error) {
+    console.error("Failed to update schedule:", error);
+    alert("There was an error updating the schedule. Please try again.");
+  }
+}
+
+const handleUpdateScheduleRuns = async () => {
+  try {
     if (!editRunsOrderSchedule.value) {
       throw new Error("no hay schedule");
     }
@@ -163,22 +179,19 @@ const handleUpdateSchedule = async () => {
     const response: APIResponse<Schedule> = await apiUpdateScheduleRuns(runs)
 
     console.log("Runs updated:", response.data);
-    // router.push('/runs')
   } catch (error) {
-    console.error("Failed to create schedule:", error);
-    alert("There was an error creating the schedule. Please try again.");
+    console.error("Failed to update schedule runs:", error);
+    alert("There was an error upting schedule runs. Please try again.");
   }
 }
 
 const saveRuns = ($event: { runs: Run[], backup: Run[], ordered: Run[] }) => {
-  // console.log($event.runs)
   if (editRunsOrderSchedule.value) {
     editRunsOrderSchedule.value.runs = $event.runs
     editRunsOrderSchedule.value.backup_runs = $event.backup
     editRunsOrderSchedule.value.ordered_runs = $event.ordered
   }
-  // console.log(editRunsOrderSchedule.value)
-  handleUpdateSchedule()
+  handleUpdateScheduleRuns()
 }
 
 onMounted(() => {
