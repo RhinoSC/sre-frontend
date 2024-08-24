@@ -3,7 +3,7 @@
     <div class="">
       <div class="flex flex-col items-center justify-center gap-6">
         <h1 class="text-4xl font-bold text-center text-violet-600">Schedules</h1>
-        <p class="text-xl">Total schedules: 10</p>
+        <p class="text-xl">Total schedules: {{ schedules?.length }}</p>
         <RouterLink class="h-12 text-center w-60" to="/schedules/new">
           <div
             class="py-1 border rounded-lg dark:bg-gray-dark-300 bg-gray-light-200 dark:border-violet-600 dark:hover:bg-gray-light-400 dark:active:bg-gray-dark-100 border-gray-dark-100 hover:bg-gray-light-300 active:bg-gray-dark-100">
@@ -12,7 +12,7 @@
         </RouterLink>
       </div>
     </div>
-    <div class="flex flex-col items-center justify-center w-full">
+    <div class="flex flex-col items-center justify-center w-full" v-if="schedules">
       <table class="w-full text-left table-auto rtl:text-right">
         <thead class="dark:bg-gray-dark-300 bg-gray-light-300">
           <tr>
@@ -85,6 +85,9 @@
         </template>
       </ModalComponent>
     </div>
+    <div v-else>
+      Loading schedules...
+    </div>
   </div>
 
 </template>
@@ -128,7 +131,7 @@ const handleDeleteSchedule = async () => {
 }
 
 // const schedules = [{ "event_id": "event1", "name": "event 1 name", "runs": [], "start_time_mili": "12:00 - 22-09-2024", "end_time_mili": "12:00 - 22-09-2024" }]
-const schedules = ref<Schedule[]>([])
+const schedules = ref<Schedule[]>()
 
 const handleGetAllSchedules = async () => {
   try {
