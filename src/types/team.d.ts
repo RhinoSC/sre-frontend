@@ -7,6 +7,7 @@ export interface Team {
 }
 
 export interface TeamDTO {
+  id?: string;
   name: string;
   players: PlayerDTO[];
 }

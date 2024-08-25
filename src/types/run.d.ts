@@ -1,5 +1,5 @@
 import type { Team } from "./team";
-import type { BidDTO } from "./bid";
+import type { Bid, BidDTO } from "./bid";
 
 export interface Run {
   id: string;
@@ -11,6 +11,7 @@ export interface Run {
   status: string;
   run_metadata: RunMetadata;
   teams: Team[];
+  bids: Bid[];
   schedule_id: string;
 }
 
@@ -40,6 +41,7 @@ export interface TwitchCategory {
   box_art_url: string;
   id: string;
   name: string;
+  igdb_id?: string;
 }
 
 

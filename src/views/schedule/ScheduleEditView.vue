@@ -49,16 +49,14 @@
             <VueDatePicker v-model="endDate" placeholder="End date" text-input :flow="flow" utc locale="es-CO"
               format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " />
           </div>
-          <div class="flex flex-wrap mb-6">
+        </div>
+        <div class="flex flex-wrap mb-6">
+          <div class="flex flex-wrap w-1/2 mb-6">
             <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-first-name">
               Setup time
             </label>
-            <!-- <VueDatePicker v-model="startDate" placeholder="Start date" text-input :flow="flow" utc locale="es-CO"
-          format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " /> -->
             <VueDatePicker v-model="setupTime" time-picker />
           </div>
-        </div>
-        <div class="flex flex-wrap mb-6 -mx-3">
         </div>
         <div class="flex flex-row items-center justify-end gap-2 font-bold">
           <RouterLink to="/schedules">
@@ -110,8 +108,8 @@ import { apiGetEvents } from '@/api/event/event';
 const route = useRoute()
 const router = useRouter()
 
-const oldSchedule = ref<Schedule | null>(null)
-const newSchedule = ref<Schedule | null>(null)
+const oldSchedule = ref<Schedule>()
+const newSchedule = ref<Schedule>()
 const editRunsOrderSchedule = ref<ManageSchedule | null>(null)
 
 
@@ -152,14 +150,19 @@ const handleGetScheduleById = async () => {
 
     const response: APIResponse<Schedule> = await apiGetScheduleByID(id)
     oldSchedule.value = response.data
-    newSchedule.value = response.data
+    newSchedule.value = JSON.parse(JSON.stringify(response.data))
+
     editRunsOrderSchedule.value = { ...response.data, rows: [] }
 
-    const startDateApi = new Date(newSchedule.value.start_time_mili);
-    startDate.value = startDateApi.toISOString()
+    console.log(response.data)
 
-    const endDateApi = new Date(newSchedule.value.end_time_mili);
-    endDate.value = endDateApi.toISOString()
+    if (newSchedule.value) {
+      const startDateApi = new Date(newSchedule.value.start_time_mili);
+      startDate.value = startDateApi.toISOString()
+
+      const endDateApi = new Date(newSchedule.value.end_time_mili);
+      endDate.value = endDateApi.toISOString()
+    }
 
     // editRunsOrderSchedule.value.runs.forEach(run => {
     //   editRunsOrderSchedule.value?.rows.push({})

@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col items-start justify-center p-3">
-    <!-- Formulario para agregar un nuevo bid -->
+    <!-- Formulario para agregar o editar un bid -->
     <div class="flex flex-col items-start justify-center w-full mb-4">
       <div class="flex flex-row items-center justify-between w-full gap-2 mb-2">
-        <h1 class="text-xl font-semibold ">Add Bid</h1>
+        <h1 class="text-xl font-semibold">{{ isEditing ? 'Edit Bid' : 'Add Bid' }}</h1>
         <button
           class="px-4 py-2 text-sm text-white border rounded bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900"
           @click="handleSaveBids">
@@ -11,7 +11,7 @@
         </button>
       </div>
       <div class="w-full">
-        <form @submit.prevent="addBid" class="flex flex-wrap gap-2 mb-6 -mx-3">
+        <form @submit.prevent="isEditing ? updateBid() : addBid()" class="flex flex-wrap gap-2 mb-6 -mx-3">
           <div class="flex flex-wrap w-full gap-2">
             <div class="basis-1 grow">
               <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="bid-name">Bid Type</label>
@@ -70,8 +70,8 @@
           </div>
 
           <button type="submit"
-            class="w-full px-6 py-3 text-sm font-bold text-blue-500 border border-blue-500 rounded bg-gray-light-200 dark:bg-gray-dark-300 dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 hover:bg-gray-light-300 active:bg-gray-dark-100">Add
-            Bid</button>
+            class="w-full px-6 py-3 text-sm font-bold text-blue-500 border border-blue-500 rounded bg-gray-light-200 dark:bg-gray-dark-300 dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 hover:bg-gray-light-300 active:bg-gray-dark-100">{{
+              isEditing ? "Edit bid" : "Add bid" }}</button>
         </form>
       </div>
     </div>
@@ -95,6 +95,11 @@
         </ul>
       </div>
 
+      <!-- Botón para editar el bid -->
+      <button @click="editBid(index)"
+        class="px-4 py-2 text-sm text-blue-500 border border-blue-500 rounded bg-gray-light-200 dark:bg-gray-dark-300 dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 hover:bg-gray-light-300 active:bg-gray-dark-100">Edit
+        Bid</button>
+
       <!-- Botón para eliminar el bid -->
       <button @click="removeBid(index)"
         class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded bg-gray-light-200 dark:bg-gray-dark-300 dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 hover:bg-gray-light-300 active:bg-gray-dark-100">Remove
@@ -107,8 +112,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import type { BidDTO, BidOption } from '@/types/bid';
+import { onMounted, ref } from 'vue';
+import type { Bid, BidDTO, BidOption } from '@/types/bid';
+
+interface Props {
+  oldBids?: Bid[]
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits(['addBids'])
 
@@ -124,11 +135,32 @@ const newBid = ref<BidDTO>({
   bid_options: []
 });
 
+const isEditing = ref(false);
+const editingIndex = ref(-1);
+
 // Función para agregar un nuevo bid
 function addBid() {
   if (newBid.value.bidname.trim() && newBid.value.goal >= 0) {
     bids.value.push({ ...newBid.value, current_amount: 0 }); // Se inicializa con 0 el current_amount
     resetNewBid();
+  }
+}
+
+// Función para editar un bid
+function editBid(index: number) {
+  const bidToEdit = bids.value[index];
+  newBid.value = { ...bidToEdit };
+  isEditing.value = true;
+  editingIndex.value = index;
+}
+
+// Función para actualizar un bid existente
+function updateBid() {
+  if (editingIndex.value !== -1) {
+    bids.value[editingIndex.value] = { ...newBid.value };
+    resetNewBid();
+    isEditing.value = false;
+    editingIndex.value = -1;
   }
 }
 
@@ -164,9 +196,15 @@ function resetNewBid() {
     status: "active",
     bid_options: []
   };
+  isEditing.value = false;
+  editingIndex.value = -1;
 }
-</script>
 
-<style scoped>
-/* Agrega estilos específicos aquí si es necesario */
-</style>
+onMounted(() => {
+  if (props.oldBids) {
+    props.oldBids.forEach(bid => {
+      bids.value.push({ id: bid.id, type: bid.type, status: bid.status, goal: bid.goal, description: bid.description, current_amount: bid.current_amount, create_new_options: bid.create_new_options, bidname: bid.bidname, bid_options: bid.bid_options })
+    })
+  }
+})
+</script>

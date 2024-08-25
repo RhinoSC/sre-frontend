@@ -34,6 +34,16 @@ export const apiCreateRun = async <T>(runDTO: RunDTO): Promise<APIResponse<T>> =
   }
 }
 
+export const apiUpdateRun = async <T>(run: Run): Promise<APIResponse<T>> => {
+  try {
+    const response = await apiClient.patch(`/runs/${run.id}`, run)
+    const apiResponse: APIResponse = response.data
+    return apiResponse
+  } catch (error) {
+    throw new Error("Failed to update run");
+  }
+}
+
 export const apiUpdateScheduleRuns = async <T>(runs: Run[]): Promise<APIResponse<T>> => {
   try {
     const response = await apiClient.post("/runs/order", runs)
@@ -57,6 +67,16 @@ export const apiDeleteRun = async <T>(id: string): Promise<APIResponse<T>> => {
 export const apiGetTwitchCategories = async <T>(name: string): Promise<APIResponse<T>> => {
   try {
     const response = await apiClient.get(`/runs/twitch/categories?name=${name}`)
+    const apiResponse: APIResponse = response.data
+    return apiResponse
+  } catch (error) {
+    throw new Error("Failed to get categories");
+  }
+}
+
+export const apiGetTwitchCategoryByID = async <T>(id: string): Promise<APIResponse<T>> => {
+  try {
+    const response = await apiClient.get(`/runs/twitch/game?id=${id}`)
     const apiResponse: APIResponse = response.data
     return apiResponse
   } catch (error) {

@@ -4,7 +4,7 @@ import SchedulesView from '../views/schedule/ScheduleView.vue'
 import SchedulesEditView from '../views/schedule/ScheduleEditView.vue'
 import SchedulesAddView from '../views/schedule/ScheduleAddView.vue'
 import RunView from '../views/run/RunView.vue'
-// import SchedulesEditView from '../views/schedule/ScheduleEditView.vue'
+import RunEditView from '../views/run/RunEditView.vue'
 import RunAddView from '../views/run/RunAddView.vue'
 import Login from '../views/LoginView.vue'
 
@@ -64,6 +64,12 @@ const router = createRouter({
       path: '/runs/new',
       name: 'RunAdd',
       component: RunAddView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/runs/edit/:id',
+      name: 'RunEdit',
+      component: RunEditView,
       meta: { requiresAuth: false }
     },
   ]

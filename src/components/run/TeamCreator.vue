@@ -79,9 +79,16 @@ import { useRouter } from 'vue-router';
 import { apiGetUsers } from '@/api/user/user';
 import type { APIResponse } from '@/types/api';
 import type { Socials, User } from '@/types/user';
-import type { TeamDTO } from '@/types/team';
+import type { Team, TeamDTO } from '@/types/team';
 
 const router = useRouter()
+
+interface Props {
+  oldTeams?: Team[]
+}
+
+const props = defineProps<Props>()
+
 
 const emit = defineEmits(['addTeams'])
 
@@ -156,13 +163,20 @@ const getUsers = async () => {
 
 const handleSaveTeams = () => {
   const newTeams: TeamDTO[] = teams.value.map(team => {
-    return { name: team.team.name, players: team.team.players }
+    return { id: team.team.id, name: team.team.name, players: team.team.players }
   })
   emit("addTeams", newTeams)
 }
 
 onMounted(() => {
   getUsers()
+  if (props.oldTeams) {
+    console.log("hola", props.oldTeams)
+    props.oldTeams.forEach(team => {
+      teams.value.push({ openUserList: false, searchQueryPlayer: "", team: team })
+    })
+  }
+
 })
 </script>
 

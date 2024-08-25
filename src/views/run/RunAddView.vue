@@ -32,7 +32,9 @@
                 <select
                   class="block w-full px-4 py-3 pr-8 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
                   id="grid-event" v-model="selectedSchedule">
-                  <option class="font-sans cursor-pointer dark:bg-gray-dark-300 bg-gray-light-200 dark:hover:bg-gray-dark-400 hover:bg-gray-light-300" v-for="schedule in schedules" :value="schedule">{{ schedule.name }}</option>
+                  <option
+                    class="font-sans cursor-pointer dark:bg-gray-dark-300 bg-gray-light-200 dark:hover:bg-gray-dark-400 hover:bg-gray-light-300"
+                    v-for="schedule in schedules" :value="schedule">{{ schedule.name }}</option>
                 </select>
                 <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
                   <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -77,7 +79,7 @@
               <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-first-name">
                 Description
               </label>
-              <textarea
+              <textarea v-model="newRun.run_metadata.note"
                 class="block p-2.5 w-full h-24 text-sm rounded-lg border px-4 py-3 mb-3 leading-tight border-gray-200 appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600 resize-none"
                 placeholder="Write your thoughts here..." maxlength="300"></textarea>
             </div>
@@ -161,7 +163,6 @@ const newRun = ref<RunDTO>({ name: "", start_time_mili: new Date().getTime(), sc
 const schedules = ref<Schedule[]>([])
 
 const selectedSchedule = ref<Schedule>()
-const startDate = ref();
 const runTime = ref({
   hours: 0,
   minutes: 0
@@ -171,11 +172,6 @@ const setupTime = ref({
   minutes: 0
 });
 
-
-watch(startDate, (newDate, _) => {
-  let dateObject = new Date(newDate)
-  newRun.value.start_time_mili = dateObject.getTime()
-})
 
 watch(runTime, (newTime, _) => {
   newRun.value.estimate_mili = (newTime.hours * 3.6e+6 + newTime.minutes * 60000)

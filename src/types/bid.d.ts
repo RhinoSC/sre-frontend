@@ -1,4 +1,17 @@
+export interface Bid {
+  id: string;
+  bidname: string;
+  goal: number;
+  current_amount: number;
+  description: string;
+  type: string;
+  create_new_options: boolean;
+  status: string;
+  bid_options: BidOption[];
+}
+
 export interface BidDTO {
+  id?: string;
   bidname: string;
   goal: number;
   current_amount: number;
