@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row items-center w-4/5">
     <div class="flex flex-row items-center justify-between flex-grow w-1/3 text-xl">
-      <div><RouterLink to="/dashboard">Home</RouterLink></div>
+      <div><RouterLink to="/">Home</RouterLink></div>
       <div><RouterLink to="/schedules">Schedules</RouterLink></div>
       <div><RouterLink to="/runs">Runs</RouterLink></div>
       <div><RouterLink to="/prizes">Prizes</RouterLink></div>
@@ -14,7 +14,7 @@
         <ThemeToggle />
         <RouterLink to="/schedules">
           <button
-            class="px-3 py-1.5 text-sm text-white border rounded bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900"
+            class="px-3 py-1.5 text-sm text-white border rounded  bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900"
           >
             Logout
           </button>
