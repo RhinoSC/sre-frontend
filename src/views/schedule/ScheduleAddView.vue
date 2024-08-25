@@ -133,17 +133,19 @@
 </template>
 
 <script lang="ts" setup>
+import { apiGetEvents } from '@/api/event/event';
 import { apiCreateSchedule } from '@/api/schedule/schedule';
 import type { APIResponse } from '@/types/api';
 import type { Schedule, ScheduleDTO } from '@/types/schedule';
-import { ref, watch } from 'vue';
+import type { MyEvent } from '@/types/event';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 const newSchedule = ref<ScheduleDTO>({ name: "", start_time_mili: 0, end_time_mili: 0, event_id: "", setup_time_mili: 0 })
 
-const events = [{ "id": "event1", "name": "event 1" }]
+const events = ref<MyEvent[]>([])
 
 const startDate = ref();
 const endDate = ref();
@@ -178,5 +180,20 @@ const handleCreateSchedule = async () => {
     alert("There was an error creating the schedule. Please try again.");
   }
 }
+
+const getEvents = async () => {
+  try {
+    const response: APIResponse<MyEvent[]> = await apiGetEvents()
+    events.value = response.data
+  } catch (error) {
+    console.error("Failed to get events:", error);
+    alert("There was an error getting events. Please try again.");
+    router.push('/schedules')
+  }
+}
+
+onMounted(() => {
+  getEvents()
+})
 
 </script>

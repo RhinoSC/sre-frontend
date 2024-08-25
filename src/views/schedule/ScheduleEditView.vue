@@ -49,6 +49,14 @@
             <VueDatePicker v-model="endDate" placeholder="End date" text-input :flow="flow" utc locale="es-CO"
               format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " />
           </div>
+          <div class="flex flex-wrap mb-6">
+            <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-first-name">
+              Setup time
+            </label>
+            <!-- <VueDatePicker v-model="startDate" placeholder="Start date" text-input :flow="flow" utc locale="es-CO"
+          format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " /> -->
+            <VueDatePicker v-model="setupTime" time-picker />
+          </div>
         </div>
         <div class="flex flex-wrap mb-6 -mx-3">
         </div>
@@ -96,6 +104,8 @@ import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import type { Run } from '@/types/run';
 import { apiUpdateScheduleRuns } from '@/api/run/run';
+import type { MyEvent } from '@/types/event';
+import { apiGetEvents } from '@/api/event/event';
 
 const route = useRoute()
 const router = useRouter()
@@ -105,14 +115,17 @@ const newSchedule = ref<Schedule | null>(null)
 const editRunsOrderSchedule = ref<ManageSchedule | null>(null)
 
 
-const events = [{ "id": "event1", "name": "event 1" }]
+const events = ref<MyEvent[]>([])
 
 const startDate = ref();
 const endDate = ref();
+const setupTime = ref({
+  hours: new Date().getHours(),
+  minutes: new Date().getMinutes()
+});
 const flow = ref(['year', 'month', 'calendar']);
 
 watch(startDate, (newDate, _) => {
-  // console.log("cambie", newDate)
   let dateObject = new Date(newDate)
   if (newSchedule.value) {
     newSchedule.value.start_time_mili = dateObject.getTime()
@@ -123,6 +136,12 @@ watch(endDate, (newDate, _) => {
   let dateObject = new Date(newDate)
   if (newSchedule.value) {
     newSchedule.value.end_time_mili = dateObject.getTime()
+  }
+})
+
+watch(setupTime, (newTime, _) => {
+  if (newSchedule.value) {
+    newSchedule.value.setup_time_mili = (newTime.hours * 3.6e+6 + newTime.minutes * 60000)
   }
 })
 
@@ -194,8 +213,20 @@ const saveRuns = ($event: { runs: Run[], backup: Run[], ordered: Run[] }) => {
   handleUpdateScheduleRuns()
 }
 
+const getEvents = async () => {
+  try {
+    const response: APIResponse<MyEvent[]> = await apiGetEvents()
+    events.value = response.data
+  } catch (error) {
+    console.error("Failed to get events:", error);
+    alert("There was an error getting events. Please try again.");
+    router.push('/schedules')
+  }
+}
+
 onMounted(() => {
   handleGetScheduleById()
+  getEvents()
 })
 
 </script>

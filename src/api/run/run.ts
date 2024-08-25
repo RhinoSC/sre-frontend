@@ -43,3 +43,23 @@ export const apiUpdateScheduleRuns = async <T>(runs: Run[]): Promise<APIResponse
     throw new Error("Failed to update schedule runs");
   }
 }
+
+export const apiDeleteRun = async <T>(id: string): Promise<APIResponse<T>> => {
+  try {
+    const response = await apiClient.delete(`/runs/${id}`)
+    const apiResponse: APIResponse = response.data
+    return apiResponse
+  } catch (error) {
+    throw new Error("Failed to delete run");
+  }
+}
+
+export const apiGetTwitchCategories = async <T>(name: string): Promise<APIResponse<T>> => {
+  try {
+    const response = await apiClient.get(`/runs/twitch/categories?name=${name}`)
+    const apiResponse: APIResponse = response.data
+    return apiResponse
+  } catch (error) {
+    throw new Error("Failed to get categories");
+  }
+}

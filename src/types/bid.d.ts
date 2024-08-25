@@ -5,6 +5,7 @@ export interface BidDTO {
   description: string;
   type: string;
   create_new_options: boolean;
+  status: string;
   bid_options: BidOption[];
 }
 

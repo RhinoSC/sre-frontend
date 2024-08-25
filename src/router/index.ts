@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue'
 import SchedulesView from '../views/schedule/ScheduleView.vue'
 import SchedulesEditView from '../views/schedule/ScheduleEditView.vue'
 import SchedulesAddView from '../views/schedule/ScheduleAddView.vue'
+import RunView from '../views/run/RunView.vue'
+// import SchedulesEditView from '../views/schedule/ScheduleEditView.vue'
+import RunAddView from '../views/run/RunAddView.vue'
 import Login from '../views/LoginView.vue'
 
 const router = createRouter({
@@ -50,7 +53,19 @@ const router = createRouter({
       name: 'ScheduleEdit',
       component: SchedulesEditView,
       meta: { requiresAuth: false }
-    }
+    },
+    {
+      path: '/runs',
+      name: 'Runs',
+      component: RunView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/runs/new',
+      name: 'RunAdd',
+      component: RunAddView,
+      meta: { requiresAuth: false }
+    },
   ]
 })
 
