@@ -141,7 +141,7 @@ const runs = ref<Run[]>()
 const handleGetAllRuns = async () => {
   try {
 
-    const response: APIResponse<Run[]> = await apiGetRuns()
+    const response: APIResponse<Run[]> = await apiGetRuns(true)
     runs.value = response.data
 
   } catch (error) {

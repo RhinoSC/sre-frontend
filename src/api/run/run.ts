@@ -4,9 +4,13 @@ import { apiClient } from "../axios";
 import type { APIResponse } from "@/types/api";
 
 
-export const apiGetRuns = async <T>(): Promise<APIResponse<Run[]>> => {
+export const apiGetRuns = async <T>(withDetails: boolean): Promise<APIResponse<Run[]>> => {
   try {
-    const response = await apiClient.get(`/runs`)
+    let url = `/runs`
+    if (!withDetails) {
+      url = `/runs?details=simple`
+    }
+    const response = await apiClient.get(url)
     const apiResponse: APIResponse = response.data
     return apiResponse
   } catch (error) {

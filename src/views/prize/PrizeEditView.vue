@@ -121,12 +121,12 @@ import { apiGetEvents } from '@/api/event/event';
 const router = useRouter()
 const route = useRoute()
 
-const allStatus = ref(["Available", "Disable"])
+const allStatus = ref(["available", "disable"])
 const events = ref<MyEvent[]>([])
 const selectedEvent = ref<MyEvent>()
 
-const oldPrize = ref<Prize>({ id: "", name: "", url: "", description: "", event_id: "", international_delivery: true, min_amount: 0, status: "Available" })
-const newPrize = ref<Prize>({ id: "", name: "", url: "", description: "", event_id: "", international_delivery: true, min_amount: 0, status: "Available" })
+const oldPrize = ref<Prize>({ id: "", name: "", url: "", description: "", event_id: "", international_delivery: true, min_amount: 0, status: "available" })
+const newPrize = ref<Prize>({ id: "", name: "", url: "", description: "", event_id: "", international_delivery: true, min_amount: 0, status: "available" })
 
 watch(selectedEvent, (newEvent, _) => {
   const selected = events.value.find(event => event.id === newEvent?.id)
