@@ -6,6 +6,9 @@ import SchedulesAddView from '../views/schedule/ScheduleAddView.vue'
 import RunView from '../views/run/RunView.vue'
 import RunEditView from '../views/run/RunEditView.vue'
 import RunAddView from '../views/run/RunAddView.vue'
+import PrizeView from '../views/prize/PrizeView.vue'
+import PrizeEditView from '../views/prize/PrizeEditView.vue'
+import PrizeAddView from '../views/prize/PrizeAddView.vue'
 import Login from '../views/LoginView.vue'
 
 const router = createRouter({
@@ -70,6 +73,24 @@ const router = createRouter({
       path: '/runs/edit/:id',
       name: 'RunEdit',
       component: RunEditView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/prizes',
+      name: 'Prizes',
+      component: PrizeView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/prizes/new',
+      name: 'PrizeAdd',
+      component: PrizeAddView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/prizes/edit/:id',
+      name: 'PrizeEdit',
+      component: PrizeEditView,
       meta: { requiresAuth: false }
     },
   ]
