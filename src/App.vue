@@ -1,23 +1,30 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import Navbar from './components/navbar/Navbar.vue'
+
+const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
 </script>
 
-<template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+<template >
+  <main class="flex flex-col items-center w-full min-h-screen transition bg-gray-dark-400 text-white-smoke dark:text-gray-dark-400 dark:bg-gray-light-100 font-lato" :class="isDarkMode ? 'dark' : 'light'">
+    <!-- Navbar -->
+    <div class="flex flex-row justify-end w-full h-12 px-6 bg-gray-dark-300 dark:bg-gray-light-300">
+      <Navbar />
     </div>
-  </header>
 
-  <RouterView />
+    <!-- Contenido principal -->
+    <main class="flex-1 p-6">
+      <!-- Aquí irá el contenido de la aplicación -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="p-4 text-xl font-bold text-center">
+      <!-- Contenido del Footer -->
+       SRE Tracker 2024
+    </footer>
+  </main>
+  <!-- <RouterView /> -->
 </template>
 
 <style scoped>
