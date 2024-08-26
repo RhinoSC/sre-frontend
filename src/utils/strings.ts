@@ -47,7 +47,7 @@ export const getRunnerString = (item: Run) => {
 export const currencyFormat = (amount: number, currency?: string) => {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: currency || 'USD'
+    currency: currency || 'EUR'
   })
 
   return formatter.format(amount)

@@ -181,7 +181,7 @@ watch(selectedRun, (newRun, _) => {
 
 const getRuns = async () => {
   try {
-    const response: APIResponse<Run[]> = await apiGetRuns(false)
+    const response: APIResponse<Run[]> = await apiGetRuns("")
     runs.value = response.data
   } catch (error) {
     console.error("Failed to get runs:", error);
@@ -200,7 +200,7 @@ watch(() => newBid.value.type, (newType, oldType) => {
 
 
 function addBidOption() {
-  newBid.value.bid_options.push({ name: '', current_amount: 0 });
+  newBid.value.bid_options.push({ id: "", name: '', current_amount: 0 });
 }
 
 function removeBidOption(index: number) {

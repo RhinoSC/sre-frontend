@@ -166,7 +166,7 @@ function updateBid() {
 
 // Función para agregar una nueva opción de bid en caso de 'bidwar'
 function addBidOption() {
-  newBid.value.bid_options.push({ name: '', current_amount: 0 });
+  newBid.value.bid_options.push({ id: "", name: '', current_amount: 0 });
 }
 
 // Función para eliminar una opción de bid
@@ -187,6 +187,7 @@ function handleSaveBids() {
 // Resetear el formulario
 function resetNewBid() {
   newBid.value = {
+    id: "",
     bidname: '',
     goal: 0,
     current_amount: 0,

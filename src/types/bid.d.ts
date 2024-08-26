@@ -25,6 +25,7 @@ export interface BidDTO {
 }
 
 export interface BidOption {
+  id: string;
   name: string;
   current_amount: number;
 }

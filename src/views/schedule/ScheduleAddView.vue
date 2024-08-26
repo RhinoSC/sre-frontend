@@ -50,7 +50,7 @@
         </div>
         <div class="w-full px-3 mb-6 md:w-1/2 md:mb-0">
           <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-first-name">
-            Start date
+            End date
           </label>
           <VueDatePicker v-model="endDate" placeholder="End date" text-input :flow="flow" utc locale="es-CO"
             format="dd/MM/yyyy, HH:mm" class="block w-full py-1 leading-tight " />
