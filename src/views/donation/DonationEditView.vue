@@ -1,103 +1,54 @@
 <template>
-  <div class="flex flex-col items-center justify-center gap-6" v-if="oldBid">
+  <div class="flex flex-col items-center justify-center gap-6" v-if="oldDonation">
     <div class="">
       <div class="flex flex-col items-center justify-center gap-6">
-        <h1 class="text-4xl font-bold text-center text-violet-600">Edit Bid {{ oldBid.bidname }}</h1>
+        <h1 class="text-4xl font-bold text-center text-violet-600">Edit Donation </h1>
       </div>
     </div>
-    <div class="w-full" v-if="newBid">
+    <div class="w-full" v-if="newDonation">
       <form @submit.prevent class="flex flex-col items-center justify-center">
-        <div class="max-w-3xl">
+        <div class="max-w-3xl px-4 py-2 rounded-lg shadow-2xl">
           <div class="flex flex-wrap mb-6 -mx-3">
-            <div class="w-1/3 px-3">
+            <div class="w-1/2 px-3">
               <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-name">
                 Name
               </label>
-              <input v-model="newBid.bidname"
-                class="block w-full px-4 py-3 mb-3 leading-tight border rounded shadow-xl appearance-none border-gray-light-300 dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
-                id="grid-name" type="text" placeholder="Bid name">
+              <input v-model="newDonation.name"
+                class="block w-full px-4 py-3 mb-1 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
+                id="grid-name" type="text" placeholder="Your name">
+              <transition name="fade">
+                <span v-if="!validations.name" class="text-xs text-red-500">Name is required.</span>
+              </transition>
             </div>
-            <div class="w-1/3 px-3">
-              <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-run">
-                Run
+            <div class="w-1/2 px-3">
+              <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-email">
+                Email
               </label>
-              <div class="relative" ref="dropdown">
-                <input @focus="showDropdown = true" v-model="searchQueryRun" type="text" placeholder="Search..."
-                  class="block w-full px-4 py-3 mb-3 leading-tight border rounded shadow-xl appearance-none border-gray-light-300 dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600" />
-                <!-- Lista de sugerencias -->
-                <ul v-if="showDropdown && filteredOptions().length"
-                  class="absolute left-0 z-10 w-full -mt-1 overflow-y-auto border rounded-md shadow-lg dark:bg-gray-dark-300 bg-gray-light-200 max-h-60">
-                  <li v-for="option in filteredOptions()" :key="option.id" @click="selectOption(option)"
-                    class="p-2 cursor-pointer dark:hover:bg-gray-dark-400 hover:bg-gray-light-300 bg-gray-light-100 dark:bg-gray-dark-300">
-                    {{ option.name }}
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div class="w-1/3 px-3">
-              <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-type">
-                Type
-              </label>
-              <div class="relative">
-                <select
-                  class="block w-full px-4 py-3 pr-8 leading-tight border rounded shadow-xl appearance-none border-gray-light-300 dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
-                  id="grid-type" v-model="newBid.type">
-                  <option
-                    class="font-sans cursor-pointer dark:bg-gray-dark-300 bg-gray-light-200 dark:hover:bg-gray-dark-400 hover:bg-gray-light-300"
-                    v-for="type in types" :value="type">{{ type }}</option>
-                </select>
-                <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                  <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                  </svg>
-                </div>
-              </div>
+              <input v-model="newDonation.email"
+                class="block w-full px-4 py-3 mb-1 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
+                id="grid-email" type="email" placeholder="Your email">
+              <transition name="fade">
+                <span v-if="!validations.email" class="text-xs text-red-500">Valid email is required.</span>
+              </transition>
             </div>
           </div>
           <div class="flex flex-wrap mb-6 -mx-3">
-            <div class="w-1/3 px-3">
-              <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-goal">
-                Goal
+            <div class="w-1/2 px-3">
+              <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-amount">
+                Amount
               </label>
-              <input v-model="newBid.goal"
-                class="block w-full px-4 py-3 mb-3 leading-tight border rounded shadow-xl appearance-none dark:border-gray-200 border-gray-light-300 dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
-                id="grid-amount" type="number" placeholder="10.0">
+              <input v-model="newDonation.amount"
+                class="block w-full px-4 py-3 mb-1 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
+                id="grid-amount" type="number" min="0" placeholder="Donation amount">
+              <transition name="fade">
+                <span v-if="!validations.amount" class="text-xs text-red-500">Amount should be greater than zero.</span>
+              </transition>
             </div>
-            <div class="w-1/3 px-3">
-              <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-current">
-                Current Amount
-              </label>
-              <input v-model="newBid.current_amount"
-                class="block w-full px-4 py-3 mb-3 leading-tight border rounded shadow-xl appearance-none dark:border-gray-200 border-gray-light-300 dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
-                id="grid-current" type="number" placeholder="5.0">
-            </div>
-            <div class="flex items-center justify-center w-1/3 px-3">
-              <div class="flex flex-col items-center justify-center gap-2">
-                <div class="flex flex-col items-start w-full gap-2">
-                  <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-status">
-                    Status
-                  </label>
-                  <div class="relative w-full -mt-2">
-                    <select
-                      class="block w-full px-4 py-3 pr-8 leading-tight border rounded shadow-xl appearance-none dark:border-gray-200 border-gray-light-300 dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
-                      id="grid-status" v-model="newBid.status">
-                      <option
-                        class="font-sans cursor-pointer dark:bg-gray-dark-300 bg-gray-light-200 dark:hover:bg-gray-dark-400 hover:bg-gray-light-300"
-                        v-for="status in allBidStatus" :value="status">{{ status }}</option>
-                    </select>
-                    <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 pointer-events-none">
-                      <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div class="flex flex-row items-center justify-center w-full h-full gap-2">
-                  <input :disabled="setCreatingDisable" type="checkbox" id="checkbox-options"
-                    v-model="newBid.create_new_options"
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                  <label for="checkbox-options"> Allow creating new options?</label>
-                </div>
+            <div class="flex items-center w-1/2 px-3">
+              <div class="flex flex-row items-center justify-center gap-2">
+                <input type="checkbox" id="checkbox" v-model="newDonation.to_bid"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                <label for="checkbox"> Donation goes to an incentive?</label>
               </div>
             </div>
           </div>
@@ -106,41 +57,43 @@
               <label class="block mb-2 text-xs font-bold tracking-wide uppercase" for="grid-first-name">
                 Description
               </label>
-              <textarea v-model="newBid.description"
-                class="shadow-xl border-gray-light-300 block p-2.5 w-full h-24 text-sm rounded-lg border px-4 py-3 mb-3 leading-tight dark:border-gray-200 appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600 resize-none"
+              <textarea v-model="newDonation.description"
+                class="block p-2.5 w-full h-24 text-sm rounded-lg border px-4 py-3 mb-1 leading-tight border-gray-200 appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600 resize-none"
                 placeholder="Write your thoughts here..." maxlength="300"></textarea>
+              <transition name="fade">
+                <span v-if="!validations.description" class="text-xs text-red-500">Description should not exceed 300
+                  characters.</span>
+              </transition>
             </div>
           </div>
-          <div v-if="newBid.type === 'bidwar'" class="w-full mt-4">
-            <div class="flex flex-row items-center justify-start gap-2 mb-2">
-              <h2 class="text-lg font-semibold">Bid Options</h2>
+          <transition name="fade">
+            <div class="flex flex-wrap items-center justify-center h-20 mb-6 -mx-4 bg-violet-600"
+              v-if="newDonation.to_bid">
+              <h1 class="text-4xl font-bold text-center text-white-smoke">Incentive selector</h1>
             </div>
-            <div v-for="(option, index) in newBid.bid_options" :key="index" class="flex gap-2 mb-2">
-              <input v-model="option.name" type="text" placeholder="Option Name"
-                class="w-full px-4 py-3 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
-                required />
-              <input v-model.number="option.current_amount" type="number" placeholder="Current Amount"
-                class="w-full px-4 py-3 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600" />
-              <button @click.prevent="removeBidOption(index)"
-                class="px-4 py-2 text-sm text-red-500 border border-red-500 rounded bg-gray-light-200 dark:bg-gray-dark-300 dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 hover:bg-gray-light-300 active:bg-gray-dark-100">Remove</button>
+          </transition>
+          <transition name="fade">
+            <div class="flex flex-wrap items-center justify-center mb-6 -mx-3" v-if="newDonation.to_bid">
+              <div class="flex flex-col w-full px-3">
+                <DonationBidSelector :oldBidDetails="oldDonation.bid_details" :amount="newDonation.amount" :runs="runs"
+                  @save-bid="saveBidOptions($event)" @remove-bid="removeBidOptions">
+                </DonationBidSelector>
+              </div>
             </div>
-            <button @click.prevent="addBidOption"
-              class="px-4 py-2 text-sm text-blue-500 border border-blue-500 rounded bg-gray-light-200 dark:bg-gray-dark-300 dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 hover:bg-gray-light-300 active:bg-gray-dark-100">Add
-              Option</button>
-          </div>
-        </div>
-        <div class="flex flex-row items-center justify-end gap-2 font-bold">
-          <RouterLink to="/runs">
+          </transition>
+          <div class="flex flex-row items-center justify-center gap-2 font-bold">
+            <RouterLink to="/runs">
+              <button
+                class="px-4 py-2 text-sm border rounded text-gray-dark-400 bg-gray-light-200 dark:bg-gray-dark-300 dark:text-white-smoke dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 border-violet-600 hover:bg-gray-light-300 active:bg-gray-dark-100">
+                Cancel
+              </button>
+            </RouterLink>
             <button
-              class="px-4 py-2 text-sm border rounded text-gray-dark-400 bg-gray-light-200 dark:bg-gray-dark-300 dark:text-white-smoke dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 border-violet-600 hover:bg-gray-light-300 active:bg-gray-dark-100">
-              Cancel
+              class="px-4 py-2 text-sm text-white border rounded bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900"
+              @click="validateForm">
+              Update
             </button>
-          </RouterLink>
-          <button
-            class="px-4 py-2 text-sm text-white border rounded bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900"
-            @click="handleUpdateBid">
-            Update
-          </button>
+          </div>
         </div>
       </form>
     </div>
@@ -151,129 +104,138 @@
 <script lang="ts" setup>
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
+import DonationBidSelector from '@/components/donation/DonationBidSelector.vue';
 
 import type { APIResponse } from '@/types/api';
-import type { Bid } from '@/types/bid';
+import type { BidDetailsDonation, Donation } from '@/types/donation';
 import type { MyEvent } from '@/types/event';
 
-import { apiGetBidByID, apiUpdateBid } from '@/api/bid/bid';
+import { apiGetDonationByID, apiUpdateDonation } from '@/api/donation/donation';
 import { apiGetEvents } from '@/api/event/event';
 import type { Run } from '@/types/run';
 import { apiGetRuns } from '@/api/run/run';
+import { useEventStore } from '@/stores/useEventStore';
+import { storeToRefs } from 'pinia';
 
 const router = useRouter()
 const route = useRoute()
+
+const eventStore = useEventStore()
+const { selectedEvent } = storeToRefs(eventStore)
+
+watch(selectedEvent, (newEvent) => {
+  if (newEvent) {
+    console.log("Selected event changed:", newEvent)
+    newDonation.value.event_id = newEvent.id
+  }
+})
 
 const searchQueryRun = ref('');
 const showDropdown = ref(false);
 const dropdown = ref();
 const setCreatingDisable = ref(false)
 
-const allBidStatus = ref(["active", "disable"])
-const types = ref(["bidwar", "goal", "total"])
-
 const runs = ref<Run[]>([])
 const selectedRun = ref<Run>()
 
 
-const oldBid = ref<Bid>({ id: "", bidname: "", type: "bidwar", status: "available", goal: 0, description: "", current_amount: 0, create_new_options: false, bid_options: [], run_id: "" })
-const newBid = ref<Bid>({ id: "", bidname: "", type: "bidwar", status: "available", goal: 0, description: "", current_amount: 0, create_new_options: false, bid_options: [], run_id: "" })
+const oldDonation = ref<Donation>({
+  id: "",
+  name: "",
+  to_bid: false,
+  time_mili: new Date().getTime(),
+  event_id: "",
+  email: "",
+  description: "",
+  bid_details: { bid_id: "", bid_description: "", type: "", run_id: "", option_name: "", option_id: "", option_amount: 0, goal: 0, current_amount: 0, create_new_options: false, bidname: "" },
+  new_bid_details: { bid_id: "", bid_description: "", type: "", run_id: "", option_name: "", option_id: "", option_amount: 0, goal: 0, current_amount: 0, create_new_options: false, bidname: "" },
+  amount: 0,
 
-
-const filteredOptions = (() => {
-  return runs.value.filter(option =>
-    option.name.toLowerCase().includes(searchQueryRun.value.toLowerCase())
-  );
+});
+const newDonation = ref<Donation>({
+  id: "",
+  name: "",
+  to_bid: false,
+  time_mili: new Date().getTime(),
+  event_id: "",
+  email: "",
+  description: "",
+  bid_details: { bid_id: "", bid_description: "", type: "", run_id: "", option_name: "", option_id: "", option_amount: 0, goal: 0, current_amount: 0, create_new_options: false, bidname: "" },
+  new_bid_details: { bid_id: "", bid_description: "", type: "", run_id: "", option_name: "", option_id: "", option_amount: 0, goal: 0, current_amount: 0, create_new_options: false, bidname: "" },
+  amount: 0,
 });
 
-const selectOption = (option: Run) => {
-  searchQueryRun.value = option.name;
-  showDropdown.value = false;
-  selectedRun.value = option
-};
+const validations = ref({
+  name: true,
+  email: true,
+  amount: true,
+  description: true,
+});
 
-const handleClickOutside = (event: Event) => {
-  if (dropdown.value && !dropdown.value.contains(event.target)) {
-    showDropdown.value = false;  // Cerrar el dropdown si se hace clic fuera de él
+
+const validateForm = () => {
+  validations.value.name = !!newDonation.value.name;
+  validations.value.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newDonation.value.email);
+  validations.value.amount = Number(newDonation.value.amount) > 0;
+  validations.value.description = newDonation.value.description.length <= 300;
+
+  if (validations.value.name && validations.value.email && validations.value.amount && validations.value.description) {
+    handleUpdateDonation();
+  } else {
+    alert("Please fill out the form correctly.");
   }
 };
 
-watch(selectedRun, (newRun, _) => {
-  const selected = runs.value.find(run => run.id === newRun?.id)
-  if (newBid.value && selected) {
-    newBid.value.run_id = selected.id
-  }
-})
+const saveBidOptions = ($event: BidDetailsDonation) => {
+  newDonation.value.new_bid_details = $event
+}
+
+const removeBidOptions = () => {
+  newDonation.value.new_bid_details = { bid_id: "", bid_description: "", type: "", run_id: "", option_name: "", option_id: "", option_amount: 0, goal: 0, current_amount: 0, create_new_options: false, bidname: "" }
+}
 
 const getRuns = async () => {
   try {
-    const response: APIResponse<Run[]> = await apiGetRuns("")
-    runs.value = response.data
+    const response: APIResponse<Run[]> = await apiGetRuns("bids");
+    runs.value = response.data;
   } catch (error) {
     console.error("Failed to get runs:", error);
     alert("There was an error getting runs. Please try again.");
-    router.push('/bids')
+    router.push('/donations');
   }
-}
+};
 
-watch(() => newBid.value.type, (newType, oldType) => {
-  if (newType !== 'bidwar') {
-    setCreatingDisable.value = true
-    newBid.value.bid_options = [];
-    newBid.value.create_new_options = false
-  }
-});
-
-
-function addBidOption() {
-  newBid.value.bid_options.push({ id: "", name: '', current_amount: 0 });
-}
-
-function removeBidOption(index: number) {
-  newBid.value.bid_options.splice(index, 1);
-}
-
-
-const handleUpdateBid = async () => {
+const handleUpdateDonation = async () => {
   try {
-    if (!newBid.value) return
-    const response: APIResponse<Bid> = await apiUpdateBid(newBid.value)
+    if (!newDonation.value) return
+    const response: APIResponse<Donation> = await apiUpdateDonation(newDonation.value)
 
-    console.log("Bid updated:", response.data);
-    router.push('/bids')
+    console.log("Donation updated:", response.data);
+    router.push('/donations')
   } catch (error) {
-    console.error("Failed to create bid:", error);
-    alert("There was an error creating the bid. Please try again.");
+    console.error("Failed to create donation:", error);
+    alert("There was an error creating the donation. Please try again.");
   }
 }
 
-const handleGetBidById = async () => {
+const handleGetDonationById = async () => {
   try {
     const id = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
     if (!id) throw new Error("Error getting id");
 
-    const response: APIResponse<Bid> = await apiGetBidByID(id)
-    oldBid.value = response.data
-    newBid.value = JSON.parse(JSON.stringify(response.data))
+    const response: APIResponse<Donation> = await apiGetDonationByID(id, true)
+    oldDonation.value = response.data
+    newDonation.value = JSON.parse(JSON.stringify(response.data))
 
-    selectedRun.value = runs.value.find(run => run.id === response.data.run_id)
-    if (selectedRun.value) {
-      selectOption(selectedRun.value)
-    }
   } catch (error) {
-    console.error("Failed to get bid:", error);
-    alert("There was an error getting the bid. Please try again.");
-    router.push('/bids')
+    console.error("Failed to get donation:", error);
+    alert("There was an error getting the donation. Please try again.");
+    router.push('/donations')
   }
 }
 
 onMounted(async () => {
-  document.addEventListener('click', handleClickOutside);
   await getRuns()
-  await handleGetBidById()
+  await handleGetDonationById()
 })
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside);
-});
 </script>

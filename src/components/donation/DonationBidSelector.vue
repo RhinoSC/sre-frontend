@@ -94,10 +94,10 @@
         <p><strong>Run:</strong> {{ selectedRun.name }}</p>
         <p><strong>Bid:</strong> {{ selectedBid.bidname }}</p>
         <p v-if="!selectedBidOption"><strong>Current amount (+ your donation):</strong>{{
-          currencyFormat(selectedBid.current_amount + amount) }}</p>
+          calculateBidAmount(selectedBid.current_amount, amount) }}</p>
         <div v-else>
           <p><strong>Option:</strong> {{ selectedBidOption.name }}</p>
-          <p><strong>Current amount (+ your donation):</strong> {{ currencyFormat(selectedBidOption.current_amount +
+          <p><strong>Current amount (+ your donation):</strong> {{ calculateBidAmount(selectedBidOption.current_amount,
             amount) }}</p>
         </div>
         <button
@@ -112,15 +112,15 @@
 
 <script setup lang="ts">
 import type { Bid, BidOption } from '@/types/bid';
-import type { BidDetailsDonationDTO } from '@/types/donation';
+import type { BidDetailsDonation, BidDetailsDonationDTO } from '@/types/donation';
 import type { Run } from '@/types/run';
 import { currencyFormat } from '@/utils/strings'
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 
 const emit = defineEmits(["save-bid", "remove-bid"]);
 
-const props = defineProps<{ amount: number, runs: Run[] }>();
+const props = defineProps<{ amount: number, runs: Run[], oldBidDetails?: BidDetailsDonation }>();
 
 const searchQueryRun = ref('');
 const isFocused = ref(false);
@@ -131,6 +131,19 @@ const selectedBidOption = ref<BidOption>();
 const newBidOptionName = ref('');
 const isSummaryVisible = ref(false);
 const newOptionCreated = ref(false);
+const edited = ref(false)
+
+function calculateBidAmount(current: number, amount: number) {
+  // if (props.oldBidDetails){
+  //   const difference = 
+  // }
+  return currencyFormat(current + amount)
+  // if (props.oldBidDetails?.bid_id && !edited.value) {
+  //   console.log("aquiii")
+  //   return currencyFormat(current)
+  // } else
+  //   return currencyFormat(current + amount)
+}
 
 const filteredRuns = computed(() => {
   return props.runs.filter(run =>
@@ -198,6 +211,7 @@ function saveSelection() {
 }
 
 function handleResetSelection() {
+  edited.value = true
   selectedRun.value = undefined;
   selectedBid.value = undefined;
   selectedBidOption.value = undefined;
@@ -205,6 +219,21 @@ function handleResetSelection() {
   isSummaryVisible.value = false;
   emit("remove-bid")
 }
+
+onMounted(() => {
+  if (props.oldBidDetails) {
+    console.log(props.oldBidDetails)
+    selectedRun.value = props.runs.find(run => run.id === props.oldBidDetails?.run_id)
+    if (selectedRun.value) {
+      searchQueryRun.value = selectedRun.value.name
+      selectedBid.value = selectedRun.value.bids.find(bid => bid.id === props.oldBidDetails?.bid_id)
+      isSummaryVisible.value = true;
+      if (props.oldBidDetails.type === "bidwar" && selectedBid.value) {
+        selectedBidOption.value = selectedBid.value.bid_options.find(option => option.id === props.oldBidDetails?.option_id)
+      }
+    }
+  }
+})
 </script>
 
 <style scoped>

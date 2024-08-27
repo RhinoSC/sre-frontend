@@ -13,9 +13,13 @@ export const apiGetDonations = async <T>(): Promise<APIResponse<Donation[]>> => 
   }
 }
 
-export const apiGetDonationByID = async <T>(id: string): Promise<APIResponse<Donation>> => {
+export const apiGetDonationByID = async <T>(id: string, details: boolean): Promise<APIResponse<Donation>> => {
   try {
-    const response = await apiClient.get(`/donations/${id}`)
+    let url = `/donations/${id}`
+    if (details) {
+      url = `/donations/${id}?details=true`
+    }
+    const response = await apiClient.get(url)
     const apiResponse: APIResponse = response.data
     return apiResponse
   } catch (error) {

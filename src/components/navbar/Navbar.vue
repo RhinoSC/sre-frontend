@@ -28,7 +28,7 @@
         <select id="bid-type" v-model="localSelectedEvent"
           class="w-full px-4 py-1 font-sans leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600"
           required>
-          <option v-for="event in events" :key="event.id" :value="event">{{ event.name }}</option>
+          <option v-for="event in localEvents" :key="event.id" :value="event">{{ event.name }}</option>
         </select>
         <ThemeToggle />
         <RouterLink to="/schedules">
@@ -46,37 +46,36 @@
 import type { MyEvent } from '@/types/event';
 import ThemeToggle from './ThemeToggle.vue';
 import { onMounted, ref, watch } from 'vue';
-import type { APIResponse } from '@/types/api';
-import { apiGetEvents } from '@/api/event/event';
-import { useEventStore } from '@/stores/useEventStore';
+import { useEventStore } from '@/stores/useEventStore'
+import { storeToRefs } from 'pinia';
 
-const { eventSelected, setEvent, clearEvent } = useEventStore();
+const eventStore = useEventStore()
+const { events, selectedEvent } = storeToRefs(eventStore)
 
-const localSelectedEvent = ref<MyEvent>()
-const events = ref<MyEvent[]>([]);
+const localEvents = ref<MyEvent[]>([])
+const localSelectedEvent = ref<MyEvent>({} as MyEvent)
 
-watch(localSelectedEvent, (newEvent, _) => {
+watch(localSelectedEvent, (newEvent) => {
   if (newEvent) {
-    setEvent(newEvent)
-  }
-
-})
-
-const getEvents = async () => {
-  try {
-    const response: APIResponse<MyEvent[]> = await apiGetEvents()
-    events.value = response.data
-  } catch (error) {
-    console.error("Failed to get events:", error);
-  }
-}
-
-onMounted(() => {
-  getEvents()
-  console.log("hli: ", eventSelected.value)
-  if (eventSelected.value) {
-    localSelectedEvent.value = eventSelected.value
+    eventStore.selectEvent(newEvent)
   }
 })
+
+onMounted(async () => {
+  // Esperar a que los eventos se hayan cargado
+  await eventStore.fetchEvents()
+
+  // Revisar si selectedEvent ya está definido después de cargar los eventos
+  if (selectedEvent.value) {
+    localSelectedEvent.value = {
+      id: selectedEvent.value.id,
+      name: selectedEvent.value.name,
+      start_time_mili: selectedEvent.value.start_time_mili,
+      end_time_mili: selectedEvent.value.end_time_mili,
+    }
+    localEvents.value = events.value
+  }
+})
+
 
 </script>

@@ -2,7 +2,7 @@
   <div class="flex flex-col items-center justify-center gap-6">
     <div class="">
       <div class="flex flex-col items-center justify-center gap-6">
-        <h1 class="text-4xl font-bold text-center text-violet-600">Add new donation {{ eventSelected }}</h1>
+        <h1 class="text-4xl font-bold text-center text-violet-600">Add new donation</h1>
       </div>
     </div>
     <div class="w-full">
@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 
 import DonationBidSelector from '@/components/donation/DonationBidSelector.vue';
@@ -113,8 +113,17 @@ import { apiCreateDonation } from '@/api/donation/donation';
 import type { Run } from '@/types/run';
 import { apiGetRuns } from '@/api/run/run';
 import { useEventStore } from '@/stores/useEventStore';
+import { storeToRefs } from 'pinia';
 
-const { eventSelected, setEvent, clearEvent } = useEventStore();
+const eventStore = useEventStore()
+const { selectedEvent } = storeToRefs(eventStore)
+
+watch(selectedEvent, (newEvent) => {
+  if (newEvent) {
+    console.log("Selected event changed:", newEvent)
+    newDonation.value.event_id = newEvent.id
+  }
+})
 
 const router = useRouter();
 const runs = ref<Run[]>([]);
@@ -171,10 +180,13 @@ const getRuns = async () => {
 
 const handleCreateDonation = async () => {
   try {
-    console.log(newDonation.value)
-    // const response: APIResponse<Donation> = await apiCreateDonation(newDonation.value);
-    // console.log("Donation created:", response.data);
-    // router.push('/donations');
+    if (!selectedEvent) {
+      alert("select an event to donate")
+      return
+    }
+    const response: APIResponse<Donation> = await apiCreateDonation(newDonation.value);
+    console.log("Donation created:", response.data);
+    router.push('/donations');
   } catch (error) {
     console.error("Failed to create donation:", error);
     alert("There was an error creating the donation. Please try again.");
@@ -183,7 +195,9 @@ const handleCreateDonation = async () => {
 
 onMounted(() => {
   getRuns();
-  console.log("event", eventSelected.value)
+  if (selectedEvent) {
+    newDonation.value.event_id = selectedEvent.value.id
+  }
 });
 
 </script>

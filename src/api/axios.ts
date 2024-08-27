@@ -5,7 +5,7 @@ export const apiClient = axios.create({
   baseURL: 'http://localhost:8080/api/v1', // Cambia esto a la URL de tu backend
   headers: {
     'Content-Type': 'application/json',
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQ2OTI1MDcsInVzZXJfaWQiOiJhZG1pbjEifQ.m0ADgX8_otC0Yu1kjiaF3qFSLNdlwRKaKvR5eqXd3rg"
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQ3ODMzNzUsInVzZXJfaWQiOiJhZG1pbjEifQ.wo3vu4GSa3BB7x77bQsNhrwQ3w-oqoUNZmF46l25bQ4"
   },
 });
 

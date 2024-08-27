@@ -19,6 +19,7 @@ export interface Donation {
   to_bid: boolean;
   event_id: string;
   bid_details: BidDetailsDonation;
+  new_bid_details?: BidDetailsDonation;
 }
 
 export interface DonationDTO {
