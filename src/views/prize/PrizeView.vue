@@ -12,6 +12,10 @@
         </RouterLink>
       </div>
     </div>
+    <div class="flex flex-col items-center justify-center gap-6">
+      <input v-model="searchQuery" type="text" placeholder="Search prizes..."
+        class="block w-full px-4 py-3 mb-1 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600" />
+    </div>
     <div class="flex flex-col items-center justify-center w-full" v-if="prizes">
       <table class="w-full text-left table-auto rtl:text-right">
         <thead class="dark:bg-gray-dark-300 bg-gray-light-300">
@@ -37,7 +41,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="prize in prizes" :key="prize.id">
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="prize in filteredPrizes" :key="prize.id">
             <td class="px-6 py-4">{{ prize.name }}</td>
             <td class="w-1/4 px-6 py-4 break-words">{{ prize.description }}</td>
             <td class="px-6 py-4">
@@ -95,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import router from '@/router';
 import ModalComponent from "@/components/modal/ModalComponent.vue";
 
@@ -118,6 +122,20 @@ const closeDeleteModal = () => {
   isModalOpened.value = false;
   selectedPrizeToDelete.value = undefined
 };
+
+const searchQuery = ref("");
+
+const filteredPrizes = computed(() => {
+  if (!prizes.value) return [];
+  return prizes.value.filter(prize => {
+    const lowerCaseQuery = searchQuery.value.toLowerCase();
+    return (
+      prize.name.toLowerCase().includes(lowerCaseQuery) ||
+      prize.description.toLowerCase().includes(lowerCaseQuery) ||
+      prize.status.toLowerCase().includes(lowerCaseQuery)
+    )
+  });
+});
 
 const handleDeletePrize = async () => {
   try {

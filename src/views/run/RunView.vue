@@ -12,6 +12,10 @@
         </RouterLink>
       </div>
     </div>
+    <div class="flex flex-col items-center justify-center gap-6">
+      <input v-model="searchQuery" type="text" placeholder="Search runs..."
+        class="block w-full px-4 py-3 mb-1 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600" />
+    </div>
     <div class="flex flex-col items-center justify-center w-full" v-if="runs">
       <table class="w-full text-left table-auto rtl:text-right">
         <thead class="dark:bg-gray-dark-300 bg-gray-light-300">
@@ -34,7 +38,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="run in runs" :key="run.id">
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="run in filteredRuns" :key="run.id">
             <td class="px-6 py-4">{{ run.name }}</td>
             <td class="px-6 py-4">{{ getRunnerString(run) }}</td>
             <td class="px-6 py-4">
@@ -96,7 +100,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import router from '@/router';
 import ModalComponent from "@/components/modal/ModalComponent.vue";
 
@@ -120,6 +124,19 @@ const closeDeleteModal = () => {
   selectedRunToDelete.value = undefined
 };
 
+const searchQuery = ref("");
+
+const filteredRuns = computed(() => {
+  if (!runs.value) return [];
+  return runs.value.filter(run => {
+    const lowerCaseQuery = searchQuery.value.toLowerCase();
+    return (
+      run.name.toLowerCase().includes(lowerCaseQuery) ||
+      getRunnerString(run).toLowerCase().includes(lowerCaseQuery)
+    )
+  });
+});
+
 const handleDeleteRun = async () => {
   try {
     if (!selectedRunToDelete.value) {
@@ -141,7 +158,7 @@ const runs = ref<Run[]>()
 const handleGetAllRuns = async () => {
   try {
 
-    const response: APIResponse<Run[]> = await apiGetRuns(true)
+    const response: APIResponse<Run[]> = await apiGetRuns("")
     runs.value = response.data
 
   } catch (error) {

@@ -12,6 +12,10 @@
         </RouterLink>
       </div>
     </div>
+    <div class="flex flex-col items-center justify-center gap-6">
+      <input v-model="searchQuery" type="text" placeholder="Search donations..."
+        class="block w-full px-4 py-3 mb-1 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600" />
+    </div>
     <div class="flex flex-col items-center justify-center w-full" v-if="donations">
       <table class="w-full text-left table-auto rtl:text-right">
         <thead class="dark:bg-gray-dark-300 bg-gray-light-300">
@@ -40,7 +44,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="donation in donations"
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="donation in filteredDonations"
             :key="donation.id">
             <td class="px-6 py-4">{{ donation.email }}</td>
             <td class="px-6 py-4">{{ donation.name }}</td>
@@ -103,7 +107,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import router from '@/router';
 import ModalComponent from "@/components/modal/ModalComponent.vue";
 
@@ -142,10 +146,27 @@ const getRuns = async () => {
   }
 }
 
-const getRunName = (run_id: string) => {
-  const run = runs.value.find(run => run.id === run_id)
-  return run?.name
-}
+const searchQuery = ref("");
+
+const filteredDonations = computed(() => {
+  if (!donations.value) return [];
+  return donations.value.filter(donation => {
+    const lowerCaseQuery = searchQuery.value.toLowerCase();
+    return (
+      donation.email.toLowerCase().includes(lowerCaseQuery) ||
+      donation.name.toLowerCase().includes(lowerCaseQuery) ||
+      donation.description.toLowerCase().includes(lowerCaseQuery) ||
+      new Date(donation.time_mili).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        hour12: false
+      }).toLowerCase().includes(lowerCaseQuery)
+    )
+  });
+});
 
 const handleDeleteDonation = async () => {
   try {

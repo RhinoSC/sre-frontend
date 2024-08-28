@@ -12,6 +12,10 @@
         </RouterLink>
       </div>
     </div>
+    <div class="flex flex-col items-center justify-center gap-6">
+      <input v-model="searchQuery" type="text" placeholder="Search bids..."
+        class="block w-full px-4 py-3 mb-1 leading-tight border border-gray-200 rounded appearance-none dark:bg-gray-dark-300 bg-gray-light-200 focus:outline-none focus:border-violet-600" />
+    </div>
     <div class="flex flex-col items-center justify-center w-full" v-if="bids">
       <table class="w-full text-left table-auto rtl:text-right">
         <thead class="dark:bg-gray-dark-300 bg-gray-light-300">
@@ -40,7 +44,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="bid in bids" :key="bid.id">
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="bid in filteredBids" :key="bid.id">
             <td class="px-6 py-4">{{ bid.bidname }}</td>
             <td class="px-6 py-4">{{ currencyFormat(bid.goal) }}</td>
             <td class="px-6 py-4">{{ currencyFormat(bid.current_amount) }}</td>
@@ -95,7 +99,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import router from '@/router';
 import ModalComponent from "@/components/modal/ModalComponent.vue";
 
@@ -125,7 +129,7 @@ const runs = ref<Run[]>([])
 
 const getRuns = async () => {
   try {
-    const response: APIResponse<Run[]> = await apiGetRuns(false)
+    const response: APIResponse<Run[]> = await apiGetRuns("simple")
     runs.value = response.data
   } catch (error) {
     console.error("Failed to get runs:", error);
@@ -138,6 +142,22 @@ const getRunName = (run_id: string) => {
   const run = runs.value.find(run => run.id === run_id)
   return run?.name
 }
+
+const searchQuery = ref("");
+
+const filteredBids = computed(() => {
+  if (!bids.value) return [];
+  return bids.value.filter(bid => {
+    const lowerCaseQuery = searchQuery.value.toLowerCase();
+    return (
+      bid.bidname.toLowerCase().includes(lowerCaseQuery) ||
+      bid.description.toLowerCase().includes(lowerCaseQuery) ||
+      bid.description.toLowerCase().includes(lowerCaseQuery) ||
+      bid.type.toLowerCase().includes(lowerCaseQuery) ||
+      getRunName(bid.run_id)?.toLocaleLowerCase().includes(lowerCaseQuery)
+    )
+  });
+});
 
 const handleDeleteBid = async () => {
   try {
