@@ -58,7 +58,7 @@
             <input v-model="newBidOptionName" type="text" placeholder="New Option Name"
               class="w-full px-4 py-2 mb-2 leading-tight border border-gray-400 rounded appearance-none dark:border-gray-200 dark:bg-gray-dark-400 bg-gray-light-300 focus:outline-none focus:border-violet-600" />
             <transition name="fade">
-              <button @click="createNewBidOption"
+              <button @click="createNewBidOption" type="button"
                 class="w-full px-4 py-2 mt-2 text-sm font-bold border rounded text-gray-dark-400 bg-gray-light-200 dark:bg-gray-dark-400 dark:text-violet-600 dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 border-violet-600 hover:bg-gray-light-300 active:bg-gray-dark-100">Add
                 New Option</button>
             </transition>
@@ -66,7 +66,7 @@
           <!-- Eliminar opción creada -->
           <li v-if="newOptionCreated" class="flex flex-col p-2">
             <transition name="fade">
-              <button @click="deleteBidOption"
+              <button @click="deleteBidOption" type="button"
                 class="w-full px-4 py-2 mt-2 text-sm text-white bg-red-600 border border-red-600 rounded hover:bg-red-700 active:bg-red-900">Delete
                 Option</button>
             </transition>
@@ -80,7 +80,7 @@
       <div
         v-if="selectedRun && selectedBid && (selectedBid.type !== 'bidwar' || selectedBidOption) && !isSummaryVisible"
         class="w-full mt-4">
-        <button @click="saveSelection"
+        <button @click="saveSelection" type="button"
           class="w-full px-4 py-2 text-sm text-white border rounded bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900">Save
           Selection</button>
       </div>
@@ -101,7 +101,7 @@
             calculateBidAmount(Number(selectedBidOption.current_amount),
               Number(amount)) }}</p>
         </div>
-        <button
+        <button type="button"
           class="px-4 py-2 text-sm text-white bg-red-500 border border-red-500 rounded hover:bg-red-800 active:bg-red-900"
           @click="handleResetSelection">
           Remove

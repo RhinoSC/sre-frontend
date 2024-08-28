@@ -128,9 +128,6 @@ const schema = yup.object().shape({
 });
 
 const handleCreateUser = async () => {
-  const isValid = await schema.validate(newUser.value)
-  if (!isValid) return;
-
   try {
     const response: APIResponse<User> = await apiCreateUser(newUser.value)
     console.log("User created:", response.data);
