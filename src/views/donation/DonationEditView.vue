@@ -75,8 +75,8 @@
           <transition name="fade">
             <div class="flex flex-wrap items-center justify-center mb-6 -mx-3" v-if="newDonation.to_bid">
               <div class="flex flex-col w-full px-3">
-                <DonationBidSelector :oldBidDetails="oldDonation.bid_details" :amount="newDonation.amount" :runs="runs"
-                  @save-bid="saveBidOptions($event)" @remove-bid="removeBidOptions">
+                <DonationBidSelector :oldBidDetails="oldDonation.bid_details" :amount="Number(newDonation.amount)"
+                  :runs="runs" @save-bid="saveBidOptions($event)" @remove-bid="removeBidOptions">
                 </DonationBidSelector>
               </div>
             </div>
@@ -208,6 +208,8 @@ const getRuns = async () => {
 const handleUpdateDonation = async () => {
   try {
     if (!newDonation.value) return
+    
+    // console.log(newDonation.value)
     const response: APIResponse<Donation> = await apiUpdateDonation(newDonation.value)
 
     console.log("Donation updated:", response.data);

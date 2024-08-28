@@ -50,6 +50,7 @@ export interface BidDetailsDonation {
 export interface BidDetailsDonationDTO {
   bid_id: string;
   create_new_options: boolean;
+  type: string;
   option_id?: string;
   option_name?: string;
 }

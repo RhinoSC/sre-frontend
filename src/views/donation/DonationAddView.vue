@@ -120,7 +120,6 @@ const { selectedEvent } = storeToRefs(eventStore)
 
 watch(selectedEvent, (newEvent) => {
   if (newEvent) {
-    console.log("Selected event changed:", newEvent)
     newDonation.value.event_id = newEvent.id
   }
 })
@@ -135,7 +134,7 @@ const newDonation = ref<DonationDTO>({
   event_id: "",
   email: "",
   description: "",
-  bid_details: { bid_id: "", create_new_options: false },
+  bid_details: { bid_id: "", create_new_options: false, type: "bidwar" },
   amount: 0,
 });
 
@@ -185,7 +184,7 @@ const handleCreateDonation = async () => {
       return
     }
     const response: APIResponse<Donation> = await apiCreateDonation(newDonation.value);
-    console.log("Donation created:", response.data);
+    // console.log("Donation created:", response.data);
     router.push('/donations');
   } catch (error) {
     console.error("Failed to create donation:", error);

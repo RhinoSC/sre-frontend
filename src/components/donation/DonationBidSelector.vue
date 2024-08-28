@@ -94,11 +94,12 @@
         <p><strong>Run:</strong> {{ selectedRun.name }}</p>
         <p><strong>Bid:</strong> {{ selectedBid.bidname }}</p>
         <p v-if="!selectedBidOption"><strong>Current amount (+ your donation):</strong>{{
-          calculateBidAmount(selectedBid.current_amount, amount) }}</p>
+          calculateBidAmount(Number(selectedBid.current_amount), Number(amount)) }}</p>
         <div v-else>
           <p><strong>Option:</strong> {{ selectedBidOption.name }}</p>
-          <p><strong>Current amount (+ your donation):</strong> {{ calculateBidAmount(selectedBidOption.current_amount,
-            amount) }}</p>
+          <p><strong>Current amount (+ your donation):</strong> {{
+            calculateBidAmount(Number(selectedBidOption.current_amount),
+              Number(amount)) }}</p>
         </div>
         <button
           class="px-4 py-2 text-sm text-white bg-red-500 border border-red-500 rounded hover:bg-red-800 active:bg-red-900"
@@ -132,17 +133,16 @@ const newBidOptionName = ref('');
 const isSummaryVisible = ref(false);
 const newOptionCreated = ref(false);
 const edited = ref(false)
+const originalAmount = ref(0)
 
 function calculateBidAmount(current: number, amount: number) {
-  // if (props.oldBidDetails){
-  //   const difference = 
-  // }
-  return currencyFormat(current + amount)
-  // if (props.oldBidDetails?.bid_id && !edited.value) {
-  //   console.log("aquiii")
-  //   return currencyFormat(current)
-  // } else
-  //   return currencyFormat(current + amount)
+  if (props.oldBidDetails) {
+    if (selectedBid.value?.id === props.oldBidDetails.bid_id) {
+      const difference = amount - originalAmount.value;
+      return currencyFormat(current + difference);
+    }
+  }
+  return currencyFormat(current + amount);
 }
 
 const filteredRuns = computed(() => {
@@ -200,7 +200,7 @@ function deleteBidOption() {
 function saveSelection() {
   isSummaryVisible.value = true;
   if (selectedBid.value) {
-    const bidOptions: BidDetailsDonationDTO = { bid_id: selectedBid.value.id, create_new_options: newOptionCreated.value }
+    const bidOptions: BidDetailsDonationDTO = { bid_id: selectedBid.value.id, create_new_options: newOptionCreated.value, type: selectedBid.value.type }
     if (newOptionCreated.value && selectedBidOption.value) {
       bidOptions.option_name = selectedBidOption.value.name
     } else if (!newOptionCreated.value && selectedBidOption.value) {
@@ -222,7 +222,7 @@ function handleResetSelection() {
 
 onMounted(() => {
   if (props.oldBidDetails) {
-    console.log(props.oldBidDetails)
+    originalAmount.value = props.amount
     selectedRun.value = props.runs.find(run => run.id === props.oldBidDetails?.run_id)
     if (selectedRun.value) {
       searchQueryRun.value = selectedRun.value.name
@@ -232,6 +232,7 @@ onMounted(() => {
         selectedBidOption.value = selectedBid.value.bid_options.find(option => option.id === props.oldBidDetails?.option_id)
       }
     }
+    saveSelection()
   }
 })
 </script>
