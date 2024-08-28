@@ -15,6 +15,9 @@ import BidAddView from '../views/bid/BidAddView.vue'
 import DonationView from '../views/donation/DonationView.vue'
 import DonationEditView from '../views/donation/DonationEditView.vue'
 import DonationAddView from '../views/donation/DonationAddView.vue'
+import UserView from '../views/user/UserView.vue'
+import UserEditView from '../views/user/UserEditView.vue'
+import UserAddView from '../views/user/UserAddView.vue'
 import Login from '../views/LoginView.vue'
 
 const router = createRouter({
@@ -133,6 +136,24 @@ const router = createRouter({
       path: '/donations/edit/:id',
       name: 'DonationEdit',
       component: DonationEditView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/users',
+      name: 'Users',
+      component: UserView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/users/new',
+      name: 'UserAdd',
+      component: UserAddView,
+      meta: { requiresAuth: false }
+    },
+    {
+      path: '/users/edit/:id',
+      name: 'UserEdit',
+      component: UserEditView,
       meta: { requiresAuth: false }
     },
   ]
