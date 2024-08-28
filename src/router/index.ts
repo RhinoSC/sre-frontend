@@ -28,18 +28,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
       meta: {
-        requiresAuth: false
-      }
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-      meta: {
-        requiresAuth: false
+        requiresAuth: true
       }
     },
     {
@@ -52,116 +41,116 @@ const router = createRouter({
       path: '/schedules',
       name: 'Schedules',
       component: SchedulesView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/schedules/new',
       name: 'ScheduleAdd',
       component: SchedulesAddView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/schedules/edit/:id',
       name: 'ScheduleEdit',
       component: SchedulesEditView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/runs',
       name: 'Runs',
       component: RunView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/runs/new',
       name: 'RunAdd',
       component: RunAddView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/runs/edit/:id',
       name: 'RunEdit',
       component: RunEditView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/prizes',
       name: 'Prizes',
       component: PrizeView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/prizes/new',
       name: 'PrizeAdd',
       component: PrizeAddView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/prizes/edit/:id',
       name: 'PrizeEdit',
       component: PrizeEditView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/bids',
       name: 'Bids',
       component: BidView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/bids/new',
       name: 'BidAdd',
       component: BidAddView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/bids/edit/:id',
       name: 'BidEdit',
       component: BidEditView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/donations',
       name: 'Donations',
       component: DonationView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/donations/new',
       name: 'DonationAdd',
       component: DonationAddView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/donations/edit/:id',
       name: 'DonationEdit',
       component: DonationEditView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/users',
       name: 'Users',
       component: UserView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/users/new',
       name: 'UserAdd',
       component: UserAddView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
     {
       path: '/users/edit/:id',
       name: 'UserEdit',
       component: UserEditView,
-      meta: { requiresAuth: false }
+      meta: { requiresAuth: true }
     },
   ]
 })
 
 router.beforeEach((to, from, next) => {
   const isAuthenticated = localStorage.getItem('token')
-  console.log(isAuthenticated)
+  // console.log(isAuthenticated)
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else if (to.path === '/login' && isAuthenticated) {

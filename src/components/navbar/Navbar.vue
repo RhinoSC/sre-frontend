@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-center w-4/5">
+  <div class="flex flex-row items-center w-4/5" v-if="showNavbar">
     <div class="flex flex-row items-center justify-between flex-grow w-1/3 text-xl">
       <div>
         <RouterLink to="/">Home</RouterLink>
@@ -31,12 +31,20 @@
           <option v-for="event in localEvents" :key="event.id" :value="event">{{ event.name }}</option>
         </select>
         <ThemeToggle />
-        <RouterLink to="/schedules">
-          <button
+        <RouterLink to="/login">
+          <button @click="logout"
             class="px-3 py-1.5 text-sm text-white border rounded  bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900">
             Logout
           </button>
         </RouterLink>
+      </div>
+    </div>
+  </div>
+  <div v-else class="flex flex-row items-center w-1/2">
+    <div class="flex flex-row items-center justify-between flex-grow w-1/3 -ml-10 text-xl">
+      <h1 class="text-4xl font-bold text-center text-violet-600">SRE X</h1>
+      <div class="flex flex-row items-center justify-center">
+        <ThemeToggle />
       </div>
     </div>
   </div>
@@ -45,9 +53,10 @@
 <script setup lang="ts">
 import type { MyEvent } from '@/types/event';
 import ThemeToggle from './ThemeToggle.vue';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useEventStore } from '@/stores/useEventStore'
 import { storeToRefs } from 'pinia';
+import { useAuth } from '@/auth/useAuth';
 
 const eventStore = useEventStore()
 const { events, selectedEvent } = storeToRefs(eventStore)
@@ -61,8 +70,12 @@ watch(localSelectedEvent, (newEvent) => {
   }
 })
 
+const { isLoggedIn, logout } = useAuth(); // Asume que tienes un hook o una función para gestionar la autenticación
+
+// Computed property to check if the Navbar should be displayed
+const showNavbar = computed(() => isLoggedIn.value);
+
 onMounted(async () => {
-  // Esperar a que los eventos se hayan cargado
   await eventStore.fetchEvents()
 
   // Revisar si selectedEvent ya está definido después de cargar los eventos

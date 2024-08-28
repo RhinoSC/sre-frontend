@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { RouterLink, RouterView } from 'vue-router'
-import Navbar from './components/navbar/Navbar.vue'
+import { ref, computed, onMounted } from 'vue';
+import { RouterLink, RouterView } from 'vue-router';
+import Navbar from './components/navbar/Navbar.vue';
+import { useAuth } from '@/auth/useAuth'; // Asegúrate de tener una implementación de autenticación
 
-const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
+// const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
 </script>
 
-<template >
-   <!-- :class="isDarkMode ? 'dark' : 'light'" -->
-  <main class="flex flex-col items-center w-full min-h-screen transition dark:bg-gray-dark-400 dark:text-white-smoke text-gray-dark-400 bg-gray-light-100 font-lato">
+<template>
+  <main
+    class="flex flex-col items-center w-full min-h-screen transition dark:bg-gray-dark-400 dark:text-white-smoke text-gray-dark-400 bg-gray-light-100 font-lato">
     <!-- Navbar -->
     <div class="flex flex-row justify-end w-full h-12 px-6 dark:bg-gray-dark-300 bg-gray-light-300">
       <Navbar />
@@ -23,10 +24,11 @@ const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
     <!-- Footer -->
     <footer class="p-4 text-xl font-bold text-center">
       <!-- Contenido del Footer -->
-       SRE Tracker 2024
+      SRE Tracker 2024
     </footer>
   </main>
 </template>
+
 
 <style scoped>
 header {
