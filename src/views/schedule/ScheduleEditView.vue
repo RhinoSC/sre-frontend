@@ -154,8 +154,6 @@ const handleGetScheduleById = async () => {
 
     editRunsOrderSchedule.value = { ...response.data, rows: [] }
 
-    console.log(response.data)
-
     if (newSchedule.value) {
       const startDateApi = new Date(newSchedule.value.start_time_mili);
       startDate.value = startDateApi.toISOString()
@@ -163,10 +161,6 @@ const handleGetScheduleById = async () => {
       const endDateApi = new Date(newSchedule.value.end_time_mili);
       endDate.value = endDateApi.toISOString()
     }
-
-    // editRunsOrderSchedule.value.runs.forEach(run => {
-    //   editRunsOrderSchedule.value?.rows.push({})
-    // });
 
   } catch (error) {
     console.error("Failed to create schedule:", error);
@@ -183,7 +177,7 @@ const handleUpdateSchedule = async () => {
 
     const response: APIResponse<Schedule> = await apiUpdateSchedule(newSchedule.value)
 
-    console.log("Schedule updated:", response.data);
+    // console.log("Schedule updated:", response.data);
     router.push('/schedules')
   } catch (error) {
     console.error("Failed to update schedule:", error);
@@ -200,7 +194,7 @@ const handleUpdateScheduleRuns = async () => {
     const runs: Run[] = [...editRunsOrderSchedule.value.runs, ...editRunsOrderSchedule.value.backup_runs, ...editRunsOrderSchedule.value.ordered_runs]
     const response: APIResponse<Schedule> = await apiUpdateScheduleRuns(runs)
 
-    console.log("Runs updated:", response.data);
+    // console.log("Runs updated:", response.data);
   } catch (error) {
     console.error("Failed to update schedule runs:", error);
     alert("There was an error upting schedule runs. Please try again.");

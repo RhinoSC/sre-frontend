@@ -32,7 +32,7 @@
         </select>
         <ThemeToggle />
         <RouterLink to="/login">
-          <button @click="logout"
+          <button @click="useAuth.logout"
             class="px-3 py-1.5 text-sm text-white border rounded  bg-violet-600 border-violet-600 hover:bg-violet-700 active:bg-violet-900">
             Logout
           </button>
@@ -56,7 +56,7 @@ import ThemeToggle from './ThemeToggle.vue';
 import { computed, onMounted, ref, watch } from 'vue';
 import { useEventStore } from '@/stores/useEventStore'
 import { storeToRefs } from 'pinia';
-import { useAuth } from '@/auth/useAuth';
+import { useAuthStore } from '@/auth/useAuth';
 
 const eventStore = useEventStore()
 const { events, selectedEvent } = storeToRefs(eventStore)
@@ -70,23 +70,44 @@ watch(localSelectedEvent, (newEvent) => {
   }
 })
 
-const { isLoggedIn, logout } = useAuth(); // Asume que tienes un hook o una función para gestionar la autenticación
+const useAuth = useAuthStore(); // Asume que tienes un hook o una función para gestionar la autenticación
+const { isLoggedIn } = storeToRefs(useAuth)
 
 // Computed property to check if the Navbar should be displayed
 const showNavbar = computed(() => isLoggedIn.value);
 
-onMounted(async () => {
-  await eventStore.fetchEvents()
+watch(isLoggedIn, async (ne, ol) => {
+  console.log("watched")
+  if (ne) {
+    await eventStore.fetchEvents()
 
-  // Revisar si selectedEvent ya está definido después de cargar los eventos
-  if (selectedEvent.value) {
-    localSelectedEvent.value = {
-      id: selectedEvent.value.id,
-      name: selectedEvent.value.name,
-      start_time_mili: selectedEvent.value.start_time_mili,
-      end_time_mili: selectedEvent.value.end_time_mili,
+    // Revisar si selectedEvent ya está definido después de cargar los eventos
+    if (selectedEvent.value) {
+      localSelectedEvent.value = {
+        id: selectedEvent.value.id,
+        name: selectedEvent.value.name,
+        start_time_mili: selectedEvent.value.start_time_mili,
+        end_time_mili: selectedEvent.value.end_time_mili,
+      }
+      localEvents.value = events.value
     }
-    localEvents.value = events.value
+  }
+})
+
+onMounted(async () => {
+  if (isLoggedIn.value) {
+    await eventStore.fetchEvents()
+
+    // Revisar si selectedEvent ya está definido después de cargar los eventos
+    if (selectedEvent.value) {
+      localSelectedEvent.value = {
+        id: selectedEvent.value.id,
+        name: selectedEvent.value.name,
+        start_time_mili: selectedEvent.value.start_time_mili,
+        end_time_mili: selectedEvent.value.end_time_mili,
+      }
+      localEvents.value = events.value
+    }
   }
 })
 

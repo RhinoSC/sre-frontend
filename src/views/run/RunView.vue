@@ -114,9 +114,7 @@ const isModalOpened = ref(false);
 const selectedRunToDelete = ref<Run>()
 
 const openDeleteModal = (run: Run) => {
-  // console.log(id)
   selectedRunToDelete.value = run
-  console.log(selectedRunToDelete.value.id)
   isModalOpened.value = true;
 };
 const closeDeleteModal = () => {

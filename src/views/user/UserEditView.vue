@@ -129,7 +129,7 @@ const handleUpdateUser = async () => {
     if (!newUser.value) return
     const response: APIResponse<User> = await apiUpdateUser(newUser.value)
 
-    console.log("User updated:", response.data);
+    // console.log("User updated:", response.data);
     router.push('/users')
   } catch (error) {
     console.error("Failed to create user:", error);

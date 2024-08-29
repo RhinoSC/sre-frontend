@@ -141,7 +141,7 @@ const handleUpdatePrize = async () => {
     if (!newPrize.value) return
     const response: APIResponse<Prize> = await apiUpdatePrize(newPrize.value)
 
-    console.log("Prize updated:", response.data);
+    // console.log("Prize updated:", response.data);
     router.push('/prizes')
   } catch (error) {
     console.error("Failed to create prize:", error);

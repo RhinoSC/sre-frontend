@@ -130,7 +130,7 @@ const schema = yup.object().shape({
 const handleCreateUser = async () => {
   try {
     const response: APIResponse<User> = await apiCreateUser(newUser.value)
-    console.log("User created:", response.data);
+    // console.log("User created:", response.data);
     router.push('/users')
   } catch (error) {
     console.error("Failed to create user:", error);

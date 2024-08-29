@@ -1,6 +1,7 @@
 import type { MyEvent, MyEventDTO } from "@/types/event";
-import { apiClient } from "../axios";
 import type { APIResponse } from "@/types/api";
+import { apiClient } from "../axios";
+
 
 
 export const apiGetEvents = async <T>(): Promise<APIResponse<MyEvent[]>> => {

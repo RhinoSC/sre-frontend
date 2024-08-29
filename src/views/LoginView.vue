@@ -31,10 +31,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAuth } from '../auth/useAuth'
+import { useAuthStore } from '../auth/useAuth'
 import { defineRule, Field, Form as VForm, ErrorMessage } from 'vee-validate';
 import { required } from '@vee-validate/rules';
 import * as yup from 'yup';
+import { storeToRefs } from 'pinia';
 
 defineRule('required', required);
 
@@ -45,12 +46,13 @@ const schema = yup.object().shape({
 
 const router = useRouter()
 
-const { userLogin, loading } = useAuth()
+const useAuth = useAuthStore()
+const { loading } = storeToRefs(useAuth)
 const username = ref('')
 const password = ref('')
 
 const handleLogin = async () => {
-  await userLogin(username.value, password.value)
+  await useAuth.userLogin(username.value, password.value)
   // Redirect after login
   router.push('/')
 }

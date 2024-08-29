@@ -200,7 +200,7 @@ const handleCreateRun = async () => {
     newRun.value.estimate_string = MStoStringTime(newRun.value.estimate_mili)
     const response: APIResponse<Run> = await apiCreateRun(newRun.value)
 
-    console.log("Run created:", response.data);
+    // console.log("Run created:", response.data);
     router.push('/runs')
   } catch (error) {
     console.error("Failed to create run:", error);
@@ -224,21 +224,18 @@ const selectCategory = ($event: TwitchCategory) => {
     newRun.value.run_metadata.twitch_game_id = $event.id
     newRun.value.run_metadata.twitch_game_name = $event.name
   }
-  console.log(newRun.value.run_metadata)
 }
 
 const addTeams = ($event: TeamDTO[]) => {
   if (newRun.value) {
     newRun.value.teams = $event
   }
-  console.log(newRun.value.teams)
 }
 
 const addBids = ($event: BidDTO[]) => {
   if (newRun.value) {
     newRun.value.bids = $event
   }
-  console.log(newRun.value.bids)
 }
 
 onMounted(() => {

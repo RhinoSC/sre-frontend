@@ -41,7 +41,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="prize in filteredPrizes" :key="prize.id">
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="prize in filteredPrizes"
+            :key="prize.id">
             <td class="px-6 py-4">{{ prize.name }}</td>
             <td class="w-1/4 px-6 py-4 break-words">{{ prize.description }}</td>
             <td class="px-6 py-4">
@@ -113,9 +114,7 @@ const isModalOpened = ref(false);
 const selectedPrizeToDelete = ref<Prize>()
 
 const openDeleteModal = (prize: Prize) => {
-  // console.log(id)
   selectedPrizeToDelete.value = prize
-  console.log(selectedPrizeToDelete.value.id)
   isModalOpened.value = true;
 };
 const closeDeleteModal = () => {

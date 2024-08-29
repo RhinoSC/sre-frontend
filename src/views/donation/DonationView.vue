@@ -123,9 +123,7 @@ const isModalOpened = ref(false);
 const selectedDonationToDelete = ref<DonationWithoutBidDetails>()
 
 const openDeleteModal = (donation: DonationWithoutBidDetails) => {
-  // console.log(id)
   selectedDonationToDelete.value = donation
-  console.log(selectedDonationToDelete.value.id)
   isModalOpened.value = true;
 };
 const closeDeleteModal = () => {

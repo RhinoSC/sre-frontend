@@ -210,7 +210,7 @@ const handleUpdateRun = async () => {
     // }
     const response: APIResponse<Run> = await apiUpdateRun(newRun.value)
 
-    console.log("Run updated:", response.data);
+    // console.log("Run updated:", response.data);
     router.push('/runs')
   } catch (error) {
     console.error("Failed to create run:", error);
@@ -222,7 +222,6 @@ const getSchedules = async () => {
   try {
     const response: APIResponse<Schedule[]> = await apiGetSchedules()
     schedules.value = response.data
-    console.log(response.data)
   } catch (error) {
     console.error("Failed to get schedules:", error);
     alert("There was an error getting schedules. Please try again.");
@@ -234,21 +233,18 @@ const selectCategory = ($event: TwitchCategory) => {
   if (newRun.value) {
     newRun.value.run_metadata.twitch_game_id = $event.id
     newRun.value.run_metadata.twitch_game_name = $event.name
-    console.log(newRun.value.run_metadata)
   }
 }
 
 const addTeams = ($event: Team[]) => {
   if (newRun.value) {
     newRun.value.teams = $event
-    console.log(newRun.value.teams)
   }
 }
 
 const addBids = ($event: Bid[]) => {
   if (newRun.value) {
     newRun.value.bids = $event
-    console.log(newRun.value.bids)
   }
 }
 
@@ -283,7 +279,6 @@ const handleGetRunById = async () => {
     convertMSToSetupTime(response.data.setup_time_mili)
     convertMSToRunTime(response.data.estimate_mili)
 
-    console.log(newRun.value)
   } catch (error) {
     console.error("Failed to get run:", error);
     alert("There was an error getting the run. Please try again.");

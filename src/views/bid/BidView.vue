@@ -115,9 +115,7 @@ const isModalOpened = ref(false);
 const selectedBidToDelete = ref<Bid>()
 
 const openDeleteModal = (bid: Bid) => {
-  // console.log(id)
   selectedBidToDelete.value = bid
-  console.log(selectedBidToDelete.value.id)
   isModalOpened.value = true;
 };
 const closeDeleteModal = () => {

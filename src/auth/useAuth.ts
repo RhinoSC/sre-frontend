@@ -1,16 +1,19 @@
 import { ref, computed } from 'vue';
 import type { loginResponse } from '../types/api';
-import { login } from '../api/axios';
+import { defineStore } from 'pinia';
+import { login, setAuthToken } from '@/api/axios';
 
-// Ref para almacenar el token
-const token = ref<string | null>(localStorage.getItem('token'));
-// Ref para manejar el estado de carga
-const loading = ref(false);
 
-// Verificación básica del estado de autenticación
-const isLoggedIn = computed(() => token.value !== null);
+export const useAuthStore = defineStore('auth', () => {
+  // Ref para almacenar el token
+  const token = ref<string | null>(localStorage.getItem('token'));
+  // Ref para manejar el estado de carga
+  const loading = ref(false);
 
-export function useAuth() {
+  // Verificación básica del estado de autenticación
+  const isLoggedIn = ref(false)
+  isLoggedIn.value = localStorage.getItem('token') !== null ? true : false
+
   const userLogin = async (username: string, password: string) => {
     loading.value = true; // Comienza a cargar
     try {
@@ -20,6 +23,8 @@ export function useAuth() {
       const data: loginResponse = await response.data;
       token.value = data.data.token;
       localStorage.setItem('token', token.value);
+      isLoggedIn.value = true
+      setAuthToken(token.value); // Actualiza el encabezado de autorización
     } catch (error) {
       console.error(error);
     } finally {
@@ -28,9 +33,12 @@ export function useAuth() {
   };
 
   const logout = () => {
-    token.value = null;
     localStorage.removeItem('token');
+    isLoggedIn.value = false
   };
 
   return { token, isLoggedIn, loading, userLogin, logout };
-}
+
+})
+
+

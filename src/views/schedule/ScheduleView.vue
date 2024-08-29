@@ -36,7 +36,7 @@
               hour: 'numeric',
               minute: 'numeric',
               hour12: false
-            }) }}</span> -
+                }) }}</span> -
               <span class="pl-2">{{
                 new Date(schedule.end_time_mili).toLocaleString('es-ES', {
                   day: '2-digit',
@@ -105,9 +105,7 @@ const isModalOpened = ref(false);
 const selectedScheduleToDelete = ref<Schedule>()
 
 const openDeleteModal = (schedule: Schedule) => {
-  // console.log(id)
   selectedScheduleToDelete.value = schedule
-  console.log(selectedScheduleToDelete.value.id)
   isModalOpened.value = true;
 };
 const closeDeleteModal = () => {

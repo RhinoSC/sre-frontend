@@ -153,7 +153,7 @@ const getUsers = async () => {
     const response: APIResponse<User[]> = await apiGetUsers()
     users.value = response.data
 
-    console.log(users.value)
+    // console.log(users.value)
   } catch (error) {
     console.error("Failed to get users:", error);
     alert("There was an error getting users. Please try again.");
@@ -171,7 +171,6 @@ const handleSaveTeams = () => {
 onMounted(() => {
   getUsers()
   if (props.oldTeams) {
-    console.log("hola", props.oldTeams)
     props.oldTeams.forEach(team => {
       teams.value.push({ openUserList: false, searchQueryPlayer: "", team: team })
     })

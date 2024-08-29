@@ -2,12 +2,36 @@
 import axios from 'axios';
 
 export const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api/v1', // Cambia esto a la URL de tu backend
+  baseURL: `${import.meta.env.VITE_BE_URL}`, // Cambia esto a la URL de tu backend
   headers: {
-    'Content-Type': 'application/json',
-    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MjQ4ODk0NTMsInVzZXJfaWQiOiJhZG1pbjEifQ.n7BHtYIxip1rNMA6IuyHk78lU3x8SUkGpCrthH0NAUA"
+    'Content-Type': 'application/json'
   },
 });
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Función para actualizar el token en el encabezado
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    apiClient.defaults.headers['Authorization'] = `Bearer ${token}`;
+  } else {
+    delete apiClient.defaults.headers['Authorization'];
+  }
+  // console.log(apiClient.defaults.headers['Authorization'])
+};
 
 export const login = async (username: string, password: string) => {
   const response = await apiClient.post('/admins/login', { username, password }, {
@@ -15,8 +39,7 @@ export const login = async (username: string, password: string) => {
       "Content-Type": "application/json"
     }
   });
-  console.log(response)
-  return response
+  return response;
 };
 
 // Exporta otros métodos según sea necesario

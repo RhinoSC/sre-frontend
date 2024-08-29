@@ -147,9 +147,7 @@ const isModalOpened = ref(false);
 const selectedUserToDelete = ref<User>()
 
 const openDeleteModal = (user: User) => {
-  // console.log(id)
   selectedUserToDelete.value = user
-  console.log(selectedUserToDelete.value.id)
   isModalOpened.value = true;
 };
 const closeDeleteModal = () => {
@@ -198,7 +196,6 @@ const handleGetAllUsers = async () => {
 
     const response: APIResponse<User[]> = await apiGetUsers()
     users.value = response.data
-    console.log(response.data)
   } catch (error) {
     console.error("Failed to get users:", error);
     alert("There was an error getting the user. Please try again.");

@@ -142,7 +142,6 @@ const schema = yup.object().shape({
 
 watch(selectedEvent, (newEvent) => {
   if (newEvent) {
-    console.log("Selected event changed:", newEvent)
     newDonation.value.event_id = newEvent.id
   }
 })
@@ -225,7 +224,7 @@ const handleUpdateDonation = async () => {
     // console.log(newDonation.value)
     const response: APIResponse<Donation> = await apiUpdateDonation(newDonation.value)
 
-    console.log("Donation updated:", response.data);
+    // console.log("Donation updated:", response.data);
     router.push('/donations')
   } catch (error) {
     console.error("Failed to create donation:", error);

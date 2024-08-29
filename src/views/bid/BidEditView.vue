@@ -130,7 +130,7 @@
           </div>
         </div>
         <div class="flex flex-row items-center justify-end gap-2 font-bold">
-          <RouterLink to="/runs">
+          <RouterLink to="/bids">
             <button
               class="px-4 py-2 text-sm border rounded text-gray-dark-400 bg-gray-light-200 dark:bg-gray-dark-300 dark:text-white-smoke dark:hover:bg-gray-dark-200 dark:active:bg-gray-light-400 border-violet-600 hover:bg-gray-light-300 active:bg-gray-dark-100">
               Cancel
@@ -239,7 +239,7 @@ const handleUpdateBid = async () => {
     if (!newBid.value) return
     const response: APIResponse<Bid> = await apiUpdateBid(newBid.value)
 
-    console.log("Bid updated:", response.data);
+    // console.log("Bid updated:", response.data);
     router.push('/bids')
   } catch (error) {
     console.error("Failed to create bid:", error);
