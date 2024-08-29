@@ -77,7 +77,6 @@ const { isLoggedIn } = storeToRefs(useAuth)
 const showNavbar = computed(() => isLoggedIn.value);
 
 watch(isLoggedIn, async (ne, ol) => {
-  console.log("watched")
   if (ne) {
     await eventStore.fetchEvents()
 
