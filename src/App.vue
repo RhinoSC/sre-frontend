@@ -2,7 +2,6 @@
 import { ref, computed, onMounted } from 'vue';
 import { RouterLink, RouterView } from 'vue-router';
 import Navbar from './components/navbar/Navbar.vue';
-import { useAuth } from '@/auth/useAuth'; // Asegúrate de tener una implementación de autenticación
 
 // const isDarkMode = ref(localStorage.getItem('theme') === 'dark');
 </script>
