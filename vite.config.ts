@@ -19,7 +19,7 @@ export default defineConfig(() => {
       VITE_BE_URL: env.VITE_BACKEND_URL,
     },
     server: {
-      host: "0.0.0.0",
+      host: env.VITE_HOST,
       port: 3000,
       watch: {
         usePolling: true
