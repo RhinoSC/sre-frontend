@@ -154,10 +154,8 @@ import { useRouter, useRoute } from 'vue-router'
 
 import type { APIResponse } from '@/types/api';
 import type { Bid } from '@/types/bid';
-import type { MyEvent } from '@/types/event';
 
 import { apiGetBidByID, apiUpdateBid } from '@/api/bid/bid';
-import { apiGetEvents } from '@/api/event/event';
 import type { Run } from '@/types/run';
 import { apiGetRuns } from '@/api/run/run';
 

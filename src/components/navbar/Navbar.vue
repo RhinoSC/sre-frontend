@@ -87,6 +87,7 @@ watch(isLoggedIn, async (ne, ol) => {
         name: selectedEvent.value.name,
         start_time_mili: selectedEvent.value.start_time_mili,
         end_time_mili: selectedEvent.value.end_time_mili,
+        schedule_id: selectedEvent.value.schedule_id
       }
       localEvents.value = events.value
     }
@@ -104,6 +105,7 @@ onMounted(async () => {
         name: selectedEvent.value.name,
         start_time_mili: selectedEvent.value.start_time_mili,
         end_time_mili: selectedEvent.value.end_time_mili,
+        schedule_id: selectedEvent.value.schedule_id
       }
       localEvents.value = events.value
     }

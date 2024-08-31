@@ -106,7 +106,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import DonationBidSelector from '@/components/donation/DonationBidSelector.vue';
 
@@ -119,10 +119,8 @@ defineRule('url', url);
 
 import type { APIResponse } from '@/types/api';
 import type { BidDetailsDonation, Donation } from '@/types/donation';
-import type { MyEvent } from '@/types/event';
 
 import { apiGetDonationByID, apiUpdateDonation } from '@/api/donation/donation';
-import { apiGetEvents } from '@/api/event/event';
 import type { Run } from '@/types/run';
 import { apiGetRuns } from '@/api/run/run';
 import { useEventStore } from '@/stores/useEventStore';

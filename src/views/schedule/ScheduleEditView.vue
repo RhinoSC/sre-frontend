@@ -95,9 +95,9 @@
 <script lang="ts" setup>
 import RunManagerComponent from '@/components/schedule/RunsManager.vue'
 
-import { apiCreateSchedule, apiGetScheduleByID, apiUpdateSchedule } from '@/api/schedule/schedule';
+import { apiGetScheduleByID, apiUpdateSchedule } from '@/api/schedule/schedule';
 import type { APIResponse } from '@/types/api';
-import type { ManageSchedule, Schedule, ScheduleDTO } from '@/types/schedule';
+import type { ManageSchedule, Schedule } from '@/types/schedule';
 import { ref, watch, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 import type { Run } from '@/types/run';

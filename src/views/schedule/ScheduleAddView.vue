@@ -93,8 +93,8 @@ const events = ref<MyEvent[]>([])
 const startDate = ref();
 const endDate = ref();
 const setupTime = ref({
-  hours: new Date().getHours(),
-  minutes: new Date().getMinutes()
+  hours: 0,
+  minutes: 0
 });
 const flow = ref(['year', 'month', 'calendar']);
 
@@ -110,6 +110,12 @@ watch(endDate, (newDate, _) => {
 
 watch(setupTime, (newTime, _) => {
   newSchedule.value.setup_time_mili = (newTime.hours * 3.6e+6 + newTime.minutes * 60000)
+})
+
+watch(() => newSchedule.value.event_id, (newEventId) => {
+  const event = events.value.find(event => event.id === newEventId)
+  startDate.value = event?.start_time_mili
+  endDate.value = event?.end_time_mili
 })
 
 const handleCreateSchedule = async () => {

@@ -136,7 +136,6 @@ import type { Bid, BidDTO } from '@/types/bid';
 
 import { apiCreateBid } from '@/api/bid/bid';
 import type { MyEvent } from '@/types/event';
-import { apiGetEvents } from '@/api/event/event';
 import type { Run } from '@/types/run';
 import { apiGetRuns } from '@/api/run/run';
 
