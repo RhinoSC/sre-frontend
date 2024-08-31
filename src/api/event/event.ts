@@ -53,3 +53,13 @@ export const apiDeleteEvent = async <T>(id: string): Promise<APIResponse<T>> => 
     throw new Error("Failed to delete event");
   }
 }
+
+export const apiGetEventInfo = async <T>(): Promise<APIResponse<T>> => {
+  try {
+    const response = await apiClient.get(`/events/info`)
+    const apiResponse: APIResponse = response.data
+    return apiResponse
+  } catch (error) {
+    throw new Error(`Failed to get event info`);
+  }
+}
