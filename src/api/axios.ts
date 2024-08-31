@@ -1,4 +1,5 @@
 // src/axios.ts
+import { useAuthStore } from '@/auth/useAuth';
 import axios from 'axios';
 
 export const apiClient = axios.create({
@@ -19,6 +20,22 @@ apiClient.interceptors.request.use(
   },
 
   (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor para manejar respuestas de error
+apiClient.interceptors.response.use(
+  (response) => response, 
+  (error) => {
+    const authStore = useAuthStore(); // Instancia del store de autenticación
+
+    if (error.response?.status === 401) {
+      // Token ha expirado o no es válido
+      authStore.logout(); // Llama a la función de logout
+      window.location.href = '/login'; // Redirige al usuario a la página de login
+    }
+
     return Promise.reject(error);
   }
 );
