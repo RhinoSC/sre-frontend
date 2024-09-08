@@ -14,6 +14,10 @@ export const useAuthStore = defineStore('auth', () => {
   const isLoggedIn = ref(false)
   isLoggedIn.value = localStorage.getItem('token') !== null ? true : false
 
+  // const checkTokenValidation = async () => {
+
+  // }
+
   const userLogin = async (username: string, password: string) => {
     loading.value = true; // Comienza a cargar
     try {
