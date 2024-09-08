@@ -24,21 +24,21 @@ apiClient.interceptors.request.use(
   }
 );
 
-// Interceptor para manejar respuestas de error
-apiClient.interceptors.response.use(
-  (response) => response, 
-  (error) => {
-    const authStore = useAuthStore(); // Instancia del store de autenticación
+// // Interceptor para manejar respuestas de error
+// apiClient.interceptors.response.use(
+//   (response) => response, 
+//   (error) => {
+//     const authStore = useAuthStore(); // Instancia del store de autenticación
 
-    if (error.response?.status === 401) {
-      // Token ha expirado o no es válido
-      authStore.logout(); // Llama a la función de logout
-      window.location.href = '/login'; // Redirige al usuario a la página de login
-    }
+//     if (error.response?.status === 401) {
+//       // Token ha expirado o no es válido
+//       authStore.logout(); // Llama a la función de logout
+//       window.location.href = '/login'; // Redirige al usuario a la página de login
+//     }
 
-    return Promise.reject(error);
-  }
-);
+//     return Promise.reject(error);
+//   }
+// );
 
 // Función para actualizar el token en el encabezado
 export const setAuthToken = (token: string | null) => {
