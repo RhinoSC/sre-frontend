@@ -93,7 +93,7 @@
             </div>
             <transition name="slide">
               <div v-if="isTeamsExpanded" class="p-4">
-                <TeamCreator @addTeams="addTeams"></TeamCreator>
+                <TeamCreator :oldTeams="newRun.teams" @addTeams="addTeams"></TeamCreator>
               </div>
             </transition>
           </div>
@@ -104,7 +104,7 @@
             </div>
             <transition name="slide">
               <div v-if="isTeamsExpanded" class="p-4">
-                <BidCreator @addBids="addBids"></BidCreator>
+                <BidCreator :oldBids="newRun.bids" @addBids="addBids"></BidCreator>
               </div>
             </transition>
           </div>
@@ -198,10 +198,11 @@ const handleCreateRun = async () => {
     newRun.value.estimate_mili = (runTime.value.hours * 3.6e+6 + runTime.value.minutes * 60000)
     newRun.value.setup_time_mili = (setupTime.value.hours * 3.6e+6 + setupTime.value.minutes * 60000)
     newRun.value.estimate_string = MStoStringTime(newRun.value.estimate_mili)
-    const response: APIResponse<Run> = await apiCreateRun(newRun.value)
+    console.log(newRun.value.teams)
+    // const response: APIResponse<Run> = await apiCreateRun(newRun.value)
 
     // console.log("Run created:", response.data);
-    router.push('/runs')
+    // router.push('/runs')
   } catch (error) {
     console.error("Failed to create run:", error);
     alert("There was an error creating the run. Please try again.");

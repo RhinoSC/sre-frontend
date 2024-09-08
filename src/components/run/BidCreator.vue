@@ -116,7 +116,7 @@ import { onMounted, ref } from 'vue';
 import type { Bid, BidDTO, BidOption } from '@/types/bid';
 
 interface Props {
-  oldBids?: Bid[]
+  oldBids?: BidDTO[]
 }
 
 const props = defineProps<Props>()
