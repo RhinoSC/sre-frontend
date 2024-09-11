@@ -25,20 +25,24 @@ apiClient.interceptors.request.use(
 );
 
 // // Interceptor para manejar respuestas de error
-// apiClient.interceptors.response.use(
-//   (response) => response, 
-//   (error) => {
-//     const authStore = useAuthStore(); // Instancia del store de autenticación
+apiClient.interceptors.response.use(
+  (response) => {
+    // Si la respuesta es exitosa, simplemente la retornamos
+    return response;
+  },
+  (error) => {
+    // const router = useRouter();
+    const authStore = useAuthStore(); // Acceder al store de autenticación
 
-//     if (error.response?.status === 401) {
-//       // Token ha expirado o no es válido
-//       authStore.logout(); // Llama a la función de logout
-//       window.location.href = '/login'; // Redirige al usuario a la página de login
-//     }
-
-//     return Promise.reject(error);
-//   }
-// );
+    if (error.response && error.response.status === 401) {
+      // El token ha expirado o es inválido
+      authStore.logout(); // Limpia el estado de autenticación (token, user, etc.)
+      // router.push('/login'); // Redirige al login
+      window.location.href = '/login'; // Redirige al usuario a la página de login
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Función para actualizar el token en el encabezado
 export const setAuthToken = (token: string | null) => {
