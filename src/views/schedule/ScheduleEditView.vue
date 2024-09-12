@@ -160,6 +160,12 @@ const handleGetScheduleById = async () => {
 
       const endDateApi = new Date(newSchedule.value.end_time_mili);
       endDate.value = endDateApi.toISOString()
+
+      const totalMinutes = Math.floor(newSchedule.value.setup_time_mili / 60000);
+      const hours = Math.floor(totalMinutes / 60);
+      const minutes = totalMinutes % 60;
+      setupTime.value.hours = hours
+      setupTime.value.minutes = minutes
     }
 
   } catch (error) {
