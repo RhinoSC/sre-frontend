@@ -130,7 +130,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router'
 
 import type { APIResponse } from '@/types/api';
@@ -186,18 +186,14 @@ watch(setupTime, (newTime, _) => {
     newRun.value.setup_time_mili = (newTime.hours * 3.6e+6 + newTime.minutes * 60000)
 })
 
-watch(selectedSchedule, (newSchedule, _) => {
-  const selected = schedules.value.find(sch => sch.id === newSchedule?.id)
-  if (newRun.value && selected) {
-    const totalMinutes = Math.floor(selected.setup_time_mili / (1000 * 60));
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
+// watch(selectedSchedule, (newSchedule, _) => {
+//   const selected = schedules.value.find(sch => sch.id === newSchedule?.id)
+//   if (newRun.value && selected) {
+//     convertMSToSetupTime(selected.setup_time_mili)
+//     newRun.value.schedule_id = selected.id
+//   }
+// })
 
-    setupTime.value.hours = hours
-    setupTime.value.minutes = minutes
-    newRun.value.schedule_id = selected.id
-  }
-})
 const handleUpdateRun = async () => {
   try {
     if (!newRun.value) return
@@ -276,6 +272,7 @@ const handleGetRunById = async () => {
     newRun.value = JSON.parse(JSON.stringify(response.data))
 
     selectedSchedule.value = schedules.value.find(schedule => schedule.id = response.data.schedule_id)
+
     convertMSToSetupTime(response.data.setup_time_mili)
     convertMSToRunTime(response.data.estimate_mili)
 
