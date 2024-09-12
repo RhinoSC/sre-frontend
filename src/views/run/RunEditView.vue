@@ -186,13 +186,13 @@ watch(setupTime, (newTime, _) => {
     newRun.value.setup_time_mili = (newTime.hours * 3.6e+6 + newTime.minutes * 60000)
 })
 
-// watch(selectedSchedule, (newSchedule, _) => {
-//   const selected = schedules.value.find(sch => sch.id === newSchedule?.id)
-//   if (newRun.value && selected) {
-//     convertMSToSetupTime(selected.setup_time_mili)
-//     newRun.value.schedule_id = selected.id
-//   }
-// })
+watch(selectedSchedule, (newSchedule, _) => {
+  const selected = schedules.value.find(sch => sch.id === newSchedule?.id)
+  if (newRun.value && selected) {
+    // convertMSToSetupTime(selected.setup_time_mili)
+    newRun.value.schedule_id = selected.id
+  }
+})
 
 const handleUpdateRun = async () => {
   try {
