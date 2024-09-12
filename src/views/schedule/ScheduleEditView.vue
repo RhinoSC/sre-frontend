@@ -118,8 +118,8 @@ const events = ref<MyEvent[]>([])
 const startDate = ref();
 const endDate = ref();
 const setupTime = ref({
-  hours: new Date().getHours(),
-  minutes: new Date().getMinutes()
+  hours: 0,
+  minutes: 0
 });
 const flow = ref(['year', 'month', 'calendar']);
 
