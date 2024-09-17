@@ -254,6 +254,10 @@ const handleGetBidById = async () => {
     oldBid.value = response.data
     newBid.value = JSON.parse(JSON.stringify(response.data))
 
+    if (newBid.value.bid_options === null) {
+      newBid.value.bid_options = []
+    }
+
     selectedRun.value = runs.value.find(run => run.id === response.data.run_id)
     if (selectedRun.value) {
       selectOption(selectedRun.value)

@@ -80,8 +80,8 @@
     <div v-for="(bid, index) in bids" :key="index"
       class="flex flex-col w-full gap-2 p-4 mb-4 border rounded bg-gray-light-200 dark:bg-gray-dark-300">
       <h3 class="mb-2 text-lg font-semibold">{{ bid.bidname }} ({{ bid.type }})</h3>
-      <p>Goal: {{ bid.goal }}</p>
-      <p>Current Amount: {{ bid.current_amount }}</p>
+      <p>Goal: {{ currencyFormat(bid.goal) }}</p>
+      <p>Current Amount: {{ currencyFormat(bid.current_amount) }}</p>
       <p>Description: {{ bid.description }}</p>
 
       <!-- Lista de opciones de bid si es un 'bidwar' -->
@@ -90,7 +90,7 @@
         <ul>
           <li v-for="(option, optionIndex) in bid.bid_options" :key="optionIndex"
             class="flex items-center justify-between py-1 border-b">
-            <span>{{ option.name }}: {{ option.current_amount }}</span>
+            <span>{{ option.name }}: {{ currencyFormat(option.current_amount) }}</span>
           </li>
         </ul>
       </div>
@@ -114,6 +114,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import type { Bid, BidDTO, BidOption } from '@/types/bid';
+import { currencyFormat } from '@/utils/strings';
 
 interface Props {
   oldBids?: BidDTO[]
@@ -204,7 +205,7 @@ function resetNewBid() {
 onMounted(() => {
   if (props.oldBids) {
     props.oldBids.forEach(bid => {
-      bids.value.push({ id: bid.id, type: bid.type, status: bid.status, goal: bid.goal, description: bid.description, current_amount: bid.current_amount, create_new_options: bid.create_new_options, bidname: bid.bidname, bid_options: bid.bid_options })
+      bids.value.push({ id: bid.id, type: bid.type, status: bid.status, goal: bid.goal, description: bid.description, current_amount: bid.current_amount, create_new_options: bid.create_new_options, bidname: bid.bidname, bid_options: bid.bid_options === null ? [] : bid.bid_options })
     })
   }
 })
