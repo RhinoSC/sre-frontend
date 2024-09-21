@@ -121,10 +121,11 @@ import type { APIResponse } from '@/types/api';
 import type { BidDetailsDonationDTO, Donation, DonationDTO } from '@/types/donation';
 
 import { apiCreateDonation } from '@/api/donation/donation';
-import type { Run } from '@/types/run';
+import type { Run, RunWithBidDetails } from '@/types/run';
 import { apiGetRuns } from '@/api/run/run';
 import { useEventStore } from '@/stores/useEventStore';
 import { storeToRefs } from 'pinia';
+import { isArray } from 'lodash';
 
 const eventStore = useEventStore()
 const { selectedEvent } = storeToRefs(eventStore)
@@ -142,7 +143,7 @@ watch(selectedEvent, (newEvent) => {
 })
 
 const router = useRouter();
-const runs = ref<Run[]>([]);
+const runs = ref<RunWithBidDetails[]>([]);
 
 const newDonation = ref<DonationDTO>({
   name: "",
@@ -176,9 +177,10 @@ const removeBidOptions = () => {
 
 const getRuns = async () => {
   try {
-    const response: APIResponse<Run[]> = await apiGetRuns("bids");
+    const response: APIResponse<RunWithBidDetails[]> = await apiGetRuns("bids");
 
-    let filteredRuns = response.data.filter((run) => run.schedule_id === import.meta.env.VITE_SCHEDULE_ID && run.status === "active" && run.bids !== undefined)
+    let filteredRuns = response.data.filter(run => run.schedule_id === selectedEvent.value.schedule_id && run.status === "active" && run.bids !== undefined)
+
     filteredRuns = filteredRuns.sort((a, b) => {
       if (a.start_time_mili < b.start_time_mili) {
         return -1;

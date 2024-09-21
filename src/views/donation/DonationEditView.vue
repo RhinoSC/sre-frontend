@@ -208,7 +208,8 @@ const getRuns = async () => {
   try {
     const response: APIResponse<Run[]> = await apiGetRuns("bids");
 
-    let filteredRuns = response.data.filter((run) => run.schedule_id === import.meta.env.VITE_SCHEDULE_ID && run.status === "active" && run.bids !== undefined)
+    let filteredRuns = response.data.filter(run => run.schedule_id === selectedEvent.value.schedule_id && run.status === "active" && run.bids !== undefined)
+
     filteredRuns = filteredRuns.sort((a, b) => {
       if (a.start_time_mili < b.start_time_mili) {
         return -1;

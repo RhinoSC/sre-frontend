@@ -37,6 +37,15 @@ export interface RunDTO {
   schedule_id: string;
 }
 
+export interface RunWithBidDetails {
+  id: string;
+  name: string;
+  start_time_mili: number;
+  status: string;
+  bids: Bid[];
+  schedule_id: string;
+}
+
 export interface TwitchCategory {
   box_art_url: string;
   id: string;

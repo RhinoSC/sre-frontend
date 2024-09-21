@@ -114,19 +114,19 @@
 <script setup lang="ts">
 import type { Bid, BidOption } from '@/types/bid';
 import type { BidDetailsDonation, BidDetailsDonationDTO } from '@/types/donation';
-import type { Run } from '@/types/run';
+import type { Run, RunWithBidDetails } from '@/types/run';
 import { currencyFormat } from '@/utils/strings'
 import { ref, computed, onMounted } from 'vue';
 
 
 const emit = defineEmits(["save-bid", "remove-bid"]);
 
-const props = defineProps<{ amount: number, runs: Run[], oldBidDetails?: BidDetailsDonation }>();
+const props = defineProps<{ amount: number, runs: RunWithBidDetails[], oldBidDetails?: BidDetailsDonation }>();
 
 const searchQueryRun = ref('');
 const isFocused = ref(false);
 
-const selectedRun = ref<Run>();
+const selectedRun = ref<RunWithBidDetails>();
 const selectedBid = ref<Bid>();
 const selectedBidOption = ref<BidOption>();
 const newBidOptionName = ref('');
@@ -157,7 +157,7 @@ function handleBlur() {
   }, 200);
 }
 
-function selectRun(run: Run) {
+function selectRun(run: RunWithBidDetails) {
   selectedRun.value = run;
   searchQueryRun.value = run.name;
   selectedBid.value = undefined;
