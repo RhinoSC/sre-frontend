@@ -104,7 +104,7 @@ const router = useRouter()
 const events = ref<MyEvent[]>([])
 const selectedEvent = ref<MyEvent>()
 
-const newPrize = ref<PrizeDTO>({ name: "", url: "", description: "", event_id: "", international_delivery: true, min_amount: 0, status: "Available" })
+const newPrize = ref<PrizeDTO>({ name: "", url: "", description: "", event_id: "", international_delivery: true, min_amount: 0, status: "available" })
 
 
 watch(selectedEvent, (newEvent, _) => {
