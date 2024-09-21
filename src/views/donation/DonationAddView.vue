@@ -177,7 +177,28 @@ const removeBidOptions = () => {
 const getRuns = async () => {
   try {
     const response: APIResponse<Run[]> = await apiGetRuns("bids");
-    runs.value = response.data;
+
+    let filteredRuns = response.data.filter((run) => run.schedule_id === import.meta.env.VITE_SCHEDULE_ID && run.status === "active" && run.bids !== undefined)
+    filteredRuns = filteredRuns.sort((a, b) => {
+      if (a.start_time_mili < b.start_time_mili) {
+        return -1;
+      } else if (a.start_time_mili < b.start_time_mili) {
+        return 1;
+      }
+      return 0;
+    })
+
+    filteredRuns.forEach(run => {
+      if (run.bids) {
+        run.bids.forEach(bid => {
+          if (bid.bid_options) {
+            // Ordena las bid_options por current_amount en orden descendente
+            bid.bid_options.sort((a, b) => b.current_amount - a.current_amount);
+          }
+        });
+      }
+    });
+    runs.value = filteredRuns;
   } catch (error) {
     console.error("Failed to get runs:", error);
     alert("There was an error getting runs. Please try again.");
